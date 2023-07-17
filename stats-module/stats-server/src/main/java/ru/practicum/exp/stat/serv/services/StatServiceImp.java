@@ -20,7 +20,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class StatServiceImp implements StatService {
-
+    public static String LOG_TEXT = "Получение информации о запросе start:{}, end {}";
     private final StatsRepository statsRepository;
 
     @Override
@@ -32,22 +32,22 @@ public class StatServiceImp implements StatService {
             throw new ValidationDateException("Неверно заданы даты для поиска");
         }
         if (uris == null && !unique) {
-            log.info("Получение информации о запросе start: {}, end: {}", start, end);
+            log.info(LOG_TEXT, start, end);
             return statsRepository.findByDate(newStart, newEnd);
         }
         if (uris == null) {
-            log.info("Получение информации о запросе start: {}, end: {}, uniq: {}", start, end, true);
+            log.info(LOG_TEXT, " uniq: {}", start, end, true);
             return statsRepository.findByDateAndUniqueIp(newStart, newEnd);
         }
         if (!uris.isEmpty() && !unique) {
-            log.info("Получение информации о запросе start: {}, end: {}, uris: {}", start, end, true);
+            log.info(LOG_TEXT, " uris: {}", start, end, true);
             return statsRepository.findByDateAndUris(newStart, newEnd, uris);
         }
         if (!uris.isEmpty()) {
-            log.info("Получение информации о запросе start: {}, end: {}, unique: {}, uris: {}", start, end, true, true);
+            log.info(LOG_TEXT, " unique: {}, uris: {}", start, end, true, true);
             return statsRepository.findByDateAndUrisWithUniqueIp(newStart, newEnd, uris);
         }
-        log.info("Получение информации о запросе start:{}, end {}", start, end);
+        log.info(LOG_TEXT, start, end);
         return new ArrayList<>();
     }
 }
