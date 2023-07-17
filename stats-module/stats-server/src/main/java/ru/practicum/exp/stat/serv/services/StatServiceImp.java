@@ -36,7 +36,7 @@ public class StatServiceImp implements StatService {
             return statsRepository.findByDate(newStart, newEnd);
         }
         if (uris == null) {
-            log.info(LOG_TEXT, " uniq: {}", start, end, true);
+            log.info(LOG_TEXT, " unique: {}", start, end, true);
             return statsRepository.findByDateAndUniqueIp(newStart, newEnd);
         }
         if (!uris.isEmpty() && !unique) {
