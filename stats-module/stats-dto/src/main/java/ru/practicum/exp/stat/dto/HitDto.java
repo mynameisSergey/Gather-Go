@@ -8,7 +8,6 @@ import javax.validation.constraints.Pattern;
 /**
  * Модель объекта Hit Data Transfer Object
  */
-@Value
 @Data
 @AllArgsConstructor
 @NoArgsConstructor(force = true)
