@@ -20,7 +20,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class StatServiceImp implements StatService {
-    public static String LOG_TEXT = "Получение информации о запросе start:{}, end {}";
+    public static final String LOG_TEXT = "Получение информации о запросе start:{}, end {}";
     private final StatsRepository statsRepository;
 
     @Override
