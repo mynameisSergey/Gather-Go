@@ -3,6 +3,7 @@ package ru.practicum.exp.stat.client;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.web.reactive.function.client.WebClient;
+import ru.practicum.exp.stat.dto.HitDto;
 import ru.practicum.exp.stat.dto.ViewStatsDto;
 
 import java.time.LocalDateTime;
@@ -26,7 +27,7 @@ public class StatsClient {
      *
      * @param hitDto Объект запроса hit
      */
-    public void hitRequest(ViewStatsDto hitDto) {
+    public void hitRequest(HitDto hitDto) {
         client.post()
                 .uri("/hit")
                 .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
