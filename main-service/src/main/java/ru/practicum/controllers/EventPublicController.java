@@ -60,6 +60,6 @@ public class EventPublicController {
      */
     @GetMapping("/{id}")
     EventFullDto get(@PathVariable Long id, HttpServletRequest request) {
-        return eventPublicService.get(id, request);
+        return eventPublicService.getEventFullDto(id, request);
     }
 }

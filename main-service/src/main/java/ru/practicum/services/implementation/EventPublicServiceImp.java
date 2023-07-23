@@ -72,7 +72,7 @@ public class EventPublicServiceImp implements EventPublicService {
 
     @Override
     @Transactional(readOnly = true)
-    public EventFullDto get(Long id, HttpServletRequest request) {
+    public EventFullDto getEventFullDto(Long id, HttpServletRequest request) {
         HitDto hitDto = HitDto.builder()
                 .app(appName)
                 .uri(request.getRequestURI())
