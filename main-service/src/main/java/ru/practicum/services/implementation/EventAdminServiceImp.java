@@ -150,13 +150,13 @@ public class EventAdminServiceImp implements EventAdminService {
      * @return Новый статус после определения
      */
     private EventState determiningTheStatusForEvent(ActionState stateAction) {
-        if (stateAction.equals(ActionState.SEND_TO_REVIEW)) {
+        if (stateAction == ActionState.SEND_TO_REVIEW) {
             return EventState.PENDING;
-        } else if (stateAction.equals(ActionState.CANCEL_REVIEW)) {
+        } else if (stateAction == ActionState.CANCEL_REVIEW) {
             return EventState.CANCELED;
-        } else if (stateAction.equals(ActionState.PUBLISH_EVENT)) {
+        } else if (stateAction == ActionState.PUBLISH_EVENT) {
             return EventState.PUBLISHED;
-        } else if (stateAction.equals(ActionState.REJECT_EVENT)) {
+        } else if (stateAction == ActionState.REJECT_EVENT) {
             return EventState.CANCELED;
         } else {
             throw new BadRequestException("Статус не соответствует модификатору доступа");
