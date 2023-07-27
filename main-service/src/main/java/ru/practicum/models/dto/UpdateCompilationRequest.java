@@ -13,8 +13,8 @@ import java.util.List;
 @Value
 @Builder
 public class UpdateCompilationRequest {
-    List<Long> events;
-    Boolean pinned;
+    private List<Long> events;
+    private Boolean pinned;
     @Size(max = 50, message = "Максимальное кол-во символов для описания: 50")
-    String title;
+    private String title;
 }

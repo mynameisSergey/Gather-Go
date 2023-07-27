@@ -13,11 +13,11 @@ import java.time.LocalDateTime;
 @Value
 @Builder
 public class CommentDto {
-    Long id;
-    String text;
+    private Long id;
+    private String text;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
-    LocalDateTime createdOn;
-    UserShortDto author;
-    EventCommentDto event;
-    String state;
+    private LocalDateTime createdOn;
+    private UserShortDto author;
+    private EventCommentDto event;
+    private String state;
 }

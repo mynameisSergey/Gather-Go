@@ -14,20 +14,20 @@ import javax.validation.constraints.*;
 public class NewEventDto {
     @NotBlank(message = "Поле annotation должно быть заполнено")
     @Size(min = 20, max = 2000, message = "Минимальное кол-во символов для описания: 20. Максимальное: 2000")
-    String annotation;
+    private String annotation;
     @NotNull(message = "category не должно быть пустым")
-    Long category;
+    private Long category;
     @NotBlank(message = "Поле description должно быть заполнено")
     @Size(min = 20, max = 7000, message = "Минимальное кол-во символов для описания: 20. Максимальное: 7000")
-    String description;
+    private String description;
     @Pattern(regexp = "\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}", message = "Неправильный формат даты")
-    String eventDate;
-    LocationDto location;
-    Boolean paid;
+    private String eventDate;
+    private LocationDto location;
+    private Boolean paid;
     @PositiveOrZero
-    Integer participantLimit;
-    Boolean requestModeration;
+    private Integer participantLimit;
+    private Boolean requestModeration;
     @NotBlank(message = "Поле title должно быть заполнено")
     @Size(min = 3, max = 120, message = "Минимальное кол-во символов для описания: 3. Максимальное: 120")
-    String title;
+    private String title;
 }

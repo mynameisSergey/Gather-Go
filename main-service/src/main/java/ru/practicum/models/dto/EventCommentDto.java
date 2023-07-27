@@ -13,11 +13,11 @@ import java.time.LocalDateTime;
 @Value
 @Builder
 public class EventCommentDto {
-    String annotation;
-    CategoryDto category;
+    private String annotation;
+    private CategoryDto category;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
-    LocalDateTime eventDate;
-    Long id;
-    UserShortDto initiator;
-    String title;
+    private LocalDateTime eventDate;
+    private Long id;
+    private UserShortDto initiator;
+    private String title;
 }

@@ -14,9 +14,9 @@ import java.util.List;
 @Value
 @Builder
 public class NewCompilationDto {
-    List<Long> events;
-    boolean pinned;
+    private List<Long> events;
+    private boolean pinned;
     @Size(max = 50, message = "Максимальное кол-во символов для описания: 50")
     @NotBlank(message = "title не может быть пустым")
-    String title;
+    private String title;
 }

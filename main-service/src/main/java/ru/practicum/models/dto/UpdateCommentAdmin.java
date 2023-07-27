@@ -17,10 +17,10 @@ import javax.validation.constraints.Size;
 public class UpdateCommentAdmin {
     @NotBlank(message = "Поле text должно быть заполнено")
     @Size(max = 7000, message = "Максимальное кол-во символов для комментария: 7000")
-    String text;
+    private String text;
     @NotNull(message = "Поле userId должно быть заполнено")
-    Long userId;
+    private Long userId;
     @NotNull(message = "Поле eventId должно быть заполнено")
-    Long eventId;
-    CommentStateDto commentStateDto;
+    private Long eventId;
+    private CommentStateDto commentStateDto;
 }
