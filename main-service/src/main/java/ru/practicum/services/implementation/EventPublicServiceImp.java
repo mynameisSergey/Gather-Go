@@ -69,7 +69,7 @@ public class EventPublicServiceImp implements EventPublicService {
     }
 
     @Override
-    public EventFullDto getEventShortDto(Long id, HttpServletRequest request) {
+    public EventFullDto getEventFullDto(Long id, HttpServletRequest request) {
         HitDto hitDto = HitDto.builder()
                 .app(appName)
                 .uri(request.getRequestURI())
