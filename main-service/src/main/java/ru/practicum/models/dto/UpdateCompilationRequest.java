@@ -8,10 +8,10 @@ import java.util.List;
 
 /**
  * Модель объекта UpdateCompilationRequest
- * (Данные о подборке событий)
+ * (Изменение информации о подборке событий)
  */
-@Builder
 @Value
+@Builder
 public class UpdateCompilationRequest {
     List<Long> events;
     Boolean pinned;

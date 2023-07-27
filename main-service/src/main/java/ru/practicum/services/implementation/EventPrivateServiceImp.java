@@ -20,9 +20,10 @@ import ru.practicum.models.dto.*;
 import ru.practicum.models.enums.ActionState;
 import ru.practicum.models.enums.EventState;
 import ru.practicum.models.enums.RequestStatus;
+import ru.practicum.repositories.CategoryRepository;
 import ru.practicum.repositories.EventRepository;
-import ru.practicum.repositories.FindObjectInRepository;
 import ru.practicum.repositories.RequestRepository;
+import ru.practicum.repositories.UserRepository;
 import ru.practicum.services.EventPrivateService;
 import ru.practicum.util.DateFormatter;
 
@@ -39,24 +40,24 @@ import java.util.stream.Collectors;
 @Service
 @Slf4j
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class EventPrivateServiceImp implements EventPrivateService {
 
     private final EventRepository eventRepository;
-    private final FindObjectInRepository findObjectInRepository;
     private final RequestRepository requestRepository;
     private final ProcessingEvents processingEvents;
-
+    private final UserRepository userRepository;
+    private final CategoryRepository categoryRepository;
 
     @Override
-    @Transactional(readOnly = true)
     public List<EventShortDto> get(Long userId, int from, int size, HttpServletRequest request) {
-        findObjectInRepository.getUserById(userId);
+        userRepository.existsById(userId);
         Pageable pageable = PageRequest.of(from, size);
         List<Event> events = eventRepository.findAllByInitiatorId(userId, pageable);
         List<Event> eventsAddViews = processingEvents.addViewsInEventsList(events, request);
         List<Event> newEvents = processingEvents.confirmRequests(eventsAddViews);
         log.info("Получен приватный запрос на получение всех событий для пользователя с id: {}", userId);
-        return newEvents.stream().map(EventMapper::eventToeventShortDto).collect(Collectors.toList());
+        return newEvents.stream().map(EventMapper::eventToEventShortDto).collect(Collectors.toList());
     }
 
     @Override
@@ -74,8 +75,8 @@ public class EventPrivateServiceImp implements EventPrivateService {
                 .title(newEventDto.getTitle())
                 .build();
         checkEventDate(DateFormatter.formatDate(tempNewEventDto.getEventDate()));
-        User user = findObjectInRepository.getUserById(userId);
-        Category category = findObjectInRepository.getCategoryById(tempNewEventDto.getCategory());
+        User user = userRepository.get(userId);
+        Category category = categoryRepository.get(tempNewEventDto.getCategory());
         Long views = 0L;
         Long confirmedRequests = 0L;
         Event event = EventMapper.newEventDtoToCreateEvent(tempNewEventDto, user, category, views, confirmedRequests);
@@ -84,10 +85,9 @@ public class EventPrivateServiceImp implements EventPrivateService {
     }
 
     @Override
-    @Transactional(readOnly = true)
     public EventFullDto get(Long userId, Long eventId, HttpServletRequest request) {
-        User user = findObjectInRepository.getUserById(userId);
-        Event event = findObjectInRepository.getEventById(eventId);
+        User user = userRepository.get(userId);
+        Event event = eventRepository.get(eventId);
         checkOwnerEvent(event, user);
         addEventConfirmRequestAndSetViews(event, request);
         log.info("Получен приватный запрос на получение события с id: {} для пользователя с id: {}", eventId, userId);
@@ -100,15 +100,15 @@ public class EventPrivateServiceImp implements EventPrivateService {
         if (updateEvent.getEventDate() != null) {
             checkEventDate(DateFormatter.formatDate(updateEvent.getEventDate()));
         }
-        Event event = findObjectInRepository.getEventById(eventId);
-        User user = findObjectInRepository.getUserById(userId);
+        Event event = eventRepository.get(eventId);
+        User user = userRepository.get(userId);
         checkOwnerEvent(event, user);
         eventAvailability(event);
         if (updateEvent.getAnnotation() != null && !updateEvent.getAnnotation().isBlank()) {
             event.setAnnotation(updateEvent.getAnnotation());
         }
         if (updateEvent.getCategory() != null) {
-            Category category = findObjectInRepository.getCategoryById(updateEvent.getCategory());
+            Category category = categoryRepository.get(updateEvent.getCategory());
             event.setCategory(category);
         }
         if (updateEvent.getDescription() != null && !updateEvent.getDescription().isBlank()) {
@@ -146,11 +146,10 @@ public class EventPrivateServiceImp implements EventPrivateService {
     }
 
     @Override
-    @Transactional(readOnly = true)
     public List<ParticipationRequestDto> getRequests(Long userId, Long eventId, HttpServletRequest request) {
         try {
-            Event event = findObjectInRepository.getEventById(eventId);
-            User user = findObjectInRepository.getUserById(userId);
+            Event event = eventRepository.get(eventId);
+            User user = userRepository.get(userId);
             checkOwnerEvent(event, user);
             List<Request> requests = requestRepository.findAllByEvent(event);
             log.info("Получен приватный запрос на получение всех запросов для события с id: {} для пользователя с id: {}", eventId, userId);
@@ -165,8 +164,8 @@ public class EventPrivateServiceImp implements EventPrivateService {
     public EventRequestStatusUpdateResult updateStatus(Long userId, Long eventId,
                                                        EventRequestStatusUpdateRequest eventRequest,
                                                        HttpServletRequest request) {
-        Event event = findObjectInRepository.getEventById(eventId);
-        User user = findObjectInRepository.getUserById(userId);
+        Event event = eventRepository.get(eventId);
+        User user = userRepository.get(userId);
         checkOwnerEvent(event, user);
         log.info("Получен приватный запрос на обновление статуса запроса для событие с id: {} для пользователя с id: {}", eventId, userId);
         if (event.getState().equals(EventState.PUBLISHED)) {

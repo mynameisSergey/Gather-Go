@@ -11,10 +11,10 @@ import java.util.Set;
  */
 @Getter
 @Setter
+@Entity
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity
 @Table(name = "compilations")
 public class Compilation {
     @Id
@@ -27,6 +27,8 @@ public class Compilation {
             inverseJoinColumns = {@JoinColumn(name = "event_id")}
     )
     private Set<Event> events = new HashSet<>();
+    @Column(name = "pinned")
     private boolean pinned;
+    @Column(name = "title")
     private String title;
 }

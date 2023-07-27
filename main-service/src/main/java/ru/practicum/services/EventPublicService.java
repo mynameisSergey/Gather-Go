@@ -35,5 +35,5 @@ public interface EventPublicService {
      * @param id ID события
      * @return Искомый объект события
      */
-    EventFullDto getEventFullDto(Long id, HttpServletRequest request);
+    EventFullDto get(Long id, HttpServletRequest request);
 }

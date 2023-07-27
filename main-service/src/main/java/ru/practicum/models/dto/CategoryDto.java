@@ -18,8 +18,4 @@ public class CategoryDto {
     @NotBlank(message = "Поле name не должно быть пустым")
     String name;
 
-    public CategoryDto(Long id, String name) {
-        this.id = id;
-        this.name = name;
-    }
 }

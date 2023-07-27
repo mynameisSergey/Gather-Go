@@ -13,7 +13,6 @@ import ru.practicum.mappers.UserMapper;
 import ru.practicum.models.User;
 import ru.practicum.models.dto.NewUserRequest;
 import ru.practicum.models.dto.UserDto;
-import ru.practicum.repositories.FindObjectInRepository;
 import ru.practicum.repositories.UserRepository;
 import ru.practicum.services.UserAdminService;
 
@@ -29,7 +28,6 @@ import java.util.stream.Collectors;
 public class UserAdminServiceImp implements UserAdminService {
 
     private final UserRepository userRepository;
-    private final FindObjectInRepository findObjectInRepository;
 
     @Override
     @Transactional(readOnly = true)
@@ -66,7 +64,7 @@ public class UserAdminServiceImp implements UserAdminService {
     @Override
     @Transactional
     public void delete(Long id) {
-        User user = findObjectInRepository.getUserById(id);
+        User user = userRepository.get(id);
         log.info("Получен запрос на удаление пользователя с id: {}", id);
         userRepository.delete(user);
     }

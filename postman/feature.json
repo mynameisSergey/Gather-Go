@@ -1,0 +1,2392 @@
+{
+  "info": {
+    "_postman_id": "b7836d8d-15a0-4977-8496-33fac8bf04ef",
+    "name": "Comments",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "26184400"
+  },
+  "item": [
+    {
+      "name": "Admin",
+      "item": [
+        {
+          "name": "Добавление Comment-1 (userId:1, eventId:1)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Ответ должен содержать код статуса 201 и данные в формате json\", function () {\r",
+                  "    pm.response.to.have.status(201);  \r",
+                  "    pm.response.to.be.withBody;\r",
+                  "    pm.response.to.be.json;\r",
+                  "});\r",
+                  "\r",
+                  "const source = JSON.parse(pm.request.body.raw);\r",
+                  "const target = pm.response.json();\r",
+                  "\r",
+                  "pm.test(\"Комментарий должен содержать поля: id, text, createdOn, author, event, state\", function () {\r",
+                  "pm.expect(target).to.have.property('id');\r",
+                  "pm.expect(target).to.have.property('text');\r",
+                  "pm.expect(target).to.have.property('createdOn');\r",
+                  "pm.expect(target).to.have.property('author');\r",
+                  "pm.expect(target).to.have.property('event');\r",
+                  "pm.expect(target).to.have.property('state');\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Данные в ответе должны соответствовать данным в запросе\", function () {\r",
+                  "    pm.expect(target.id).to.not.be.null;\r",
+                  "    pm.expect(target.text).equal(source.text, 'Название крмментария должно совпадать с отправленным');\r",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"text\": \"Comment-1\",\r\n  \"userId\": 1,\r\n  \"eventId\": 1\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/admin/comments",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "admin",
+                "comments"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Обновление Comment-1",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Ответ должен содержать код статуса 200 и данные в формате json\", function () {\r",
+                  "    pm.response.to.have.status(200);  \r",
+                  "    pm.response.to.be.withBody;\r",
+                  "    pm.response.to.be.json;\r",
+                  "});\r",
+                  "\r",
+                  "const source = JSON.parse(pm.request.body.raw);\r",
+                  "const target = pm.response.json();\r",
+                  "\r",
+                  "pm.test(\"Комментарий должен содержать поля: id, text, createdOn, author, event, state\", function () {\r",
+                  "pm.expect(target).to.have.property('id');\r",
+                  "pm.expect(target).to.have.property('text');\r",
+                  "pm.expect(target).to.have.property('createdOn');\r",
+                  "pm.expect(target).to.have.property('author');\r",
+                  "pm.expect(target).to.have.property('event');\r",
+                  "pm.expect(target).to.have.property('state');\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Данные в ответе должны соответствовать данным в запросе\", function () {\r",
+                  "    pm.expect(target.id).to.not.be.null;\r",
+                  "    pm.expect(target.text).equal(source.text, 'Название крмментария должно совпадать с отправленным');\r",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"text\": \"Comment-1-Admin-Update\",\r\n  \"userId\": 1,\r\n  \"eventId\": 1,\r\n  \"commentStateDto\": \"PUBLISHED\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/admin/comments/:commentId",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "admin",
+                "comments",
+                ":commentId"
+              ],
+              "variable": [
+                {
+                  "key": "commentId",
+                  "value": "1"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Добавление Comment-2 (userId:2, eventId:1)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Ответ должен содержать код статуса 201 и данные в формате json\", function () {\r",
+                  "    pm.response.to.have.status(201);  \r",
+                  "    pm.response.to.be.withBody;\r",
+                  "    pm.response.to.be.json;\r",
+                  "});\r",
+                  "\r",
+                  "const source = JSON.parse(pm.request.body.raw);\r",
+                  "const target = pm.response.json();\r",
+                  "\r",
+                  "pm.test(\"Комментарий должен содержать поля: id, text, createdOn, author, event, state\", function () {\r",
+                  "pm.expect(target).to.have.property('id');\r",
+                  "pm.expect(target).to.have.property('text');\r",
+                  "pm.expect(target).to.have.property('createdOn');\r",
+                  "pm.expect(target).to.have.property('author');\r",
+                  "pm.expect(target).to.have.property('event');\r",
+                  "pm.expect(target).to.have.property('state');\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Данные в ответе должны соответствовать данным в запросе\", function () {\r",
+                  "    pm.expect(target.id).to.not.be.null;\r",
+                  "    pm.expect(target.text).equal(source.text, 'Название крмментария должно совпадать с отправленным');\r",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"text\": \"Comment-2\",\r\n  \"userId\": 2,\r\n  \"eventId\": 1\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/admin/comments",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "admin",
+                "comments"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Обновление Comment-2 (userId:2, eventId:1)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Ответ должен содержать код статуса 200 и данные в формате json\", function () {\r",
+                  "    pm.response.to.have.status(200);  \r",
+                  "    pm.response.to.be.withBody;\r",
+                  "    pm.response.to.be.json;\r",
+                  "});\r",
+                  "\r",
+                  "const source = JSON.parse(pm.request.body.raw);\r",
+                  "const target = pm.response.json();\r",
+                  "\r",
+                  "pm.test(\"Комментарий должен содержать поля: id, text, createdOn, author, event, state\", function () {\r",
+                  "pm.expect(target).to.have.property('id');\r",
+                  "pm.expect(target).to.have.property('text');\r",
+                  "pm.expect(target).to.have.property('createdOn');\r",
+                  "pm.expect(target).to.have.property('author');\r",
+                  "pm.expect(target).to.have.property('event');\r",
+                  "pm.expect(target).to.have.property('state');\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Данные в ответе должны соответствовать данным в запросе\", function () {\r",
+                  "    pm.expect(target.id).to.not.be.null;\r",
+                  "    pm.expect(target.text).equal(source.text, 'Название крмментария должно совпадать с отправленным');\r",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"text\": \"Comment-2-Admin-Update\",\r\n  \"userId\": 2,\r\n  \"eventId\": 1,\r\n  \"commentStateDto\": \"PUBLISHED\"\r\n  }",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/admin/comments/:commentId",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "admin",
+                "comments",
+                ":commentId"
+              ],
+              "variable": [
+                {
+                  "key": "commentId",
+                  "value": "2"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Поиск Comment-1 по ID (commentId:1)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Ответ должен содержать код статуса 200 и данные в формате json\", function () {\r",
+                  "    pm.response.to.be.ok;    \r",
+                  "    pm.response.to.be.withBody;\r",
+                  "    pm.response.to.be.json;\r",
+                  "});\r",
+                  "\r",
+                  "const target = pm.response.json();\r",
+                  "\r",
+                  "pm.test(\"Комментарий должен содержать поля: id, text, createdOn, author, event, state\", function () {\r",
+                  "pm.expect(target).to.have.property('id');\r",
+                  "pm.expect(target).to.have.property('text');\r",
+                  "pm.expect(target).to.have.property('createdOn');\r",
+                  "pm.expect(target).to.have.property('author');\r",
+                  "pm.expect(target).to.have.property('event');\r",
+                  "pm.expect(target).to.have.property('state');\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Соотвествие id\", function () {\r",
+                  "    pm.expect(target.id).to.eql(1);\r",
+                  "});\r",
+                  "pm.test(\"Соотвествие text\", function () {\r",
+                  "    pm.expect(target.text).to.eql(\"Comment-1-Admin-Update\");\r",
+                  "});\r",
+                  "pm.test(\"Соотвествие author.id\", function () {\r",
+                  "    pm.expect(target.author.id).to.eql(1);\r",
+                  "});\r",
+                  "pm.test(\"Соотвествие event.id\", function () {\r",
+                  "    pm.expect(target.event.id).to.eql(1);\r",
+                  "});\r",
+                  "pm.test(\"Соотвествие state\", function () {\r",
+                  "    pm.expect(target.state).to.eql(\"PUBLISHED\");\r",
+                  "});\r",
+                  ""
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/admin/comments/:commentId",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "admin",
+                "comments",
+                ":commentId"
+              ],
+              "variable": [
+                {
+                  "key": "commentId",
+                  "value": "1"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Добавление Comment-3 (userId:3, eventId:1)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Ответ должен содержать код статуса 201 и данные в формате json\", function () {\r",
+                  "    pm.response.to.have.status(201);  \r",
+                  "    pm.response.to.be.withBody;\r",
+                  "    pm.response.to.be.json;\r",
+                  "});\r",
+                  "\r",
+                  "const source = JSON.parse(pm.request.body.raw);\r",
+                  "const target = pm.response.json();\r",
+                  "\r",
+                  "pm.test(\"Комментарий должен содержать поля: id, text, createdOn, author, event, state\", function () {\r",
+                  "pm.expect(target).to.have.property('id');\r",
+                  "pm.expect(target).to.have.property('text');\r",
+                  "pm.expect(target).to.have.property('createdOn');\r",
+                  "pm.expect(target).to.have.property('author');\r",
+                  "pm.expect(target).to.have.property('event');\r",
+                  "pm.expect(target).to.have.property('state');\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Данные в ответе должны соответствовать данным в запросе\", function () {\r",
+                  "    pm.expect(target.id).to.not.be.null;\r",
+                  "    pm.expect(target.text).equal(source.text, 'Название крмментария должно совпадать с отправленным');\r",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"text\": \"Comment-3\",\r\n  \"userId\": 3,\r\n  \"eventId\": 1\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/admin/comments",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "admin",
+                "comments"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Поиск всех Comments у События  ID = 1 (eventId:1)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Ответ должен содержать код статуса 200\", function () {\r",
+                  "    pm.response.to.be.ok;\r",
+                  "});\r",
+                  "pm.test(\"Список комментариев в ответе\", function () {\r",
+                  "    pm.response.to.be.withBody;\r",
+                  "    pm.response.to.be.json;\r",
+                  "    var jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData.length, 'List length must be 3').to.eql(3);\r",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/admin/comments/event/:eventId?from=0&size=11",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "admin",
+                "comments",
+                "event",
+                ":eventId"
+              ],
+              "query": [
+                {
+                  "key": "from",
+                  "value": "0"
+                },
+                {
+                  "key": "size",
+                  "value": "11"
+                }
+              ],
+              "variable": [
+                {
+                  "key": "eventId",
+                  "value": "1"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Удаление Comment-3 (userId:3, eventId:1)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Ответ должен содержать код статуса 204\", function () {\r",
+                  "    pm.expect(pm.response.code).to.be.oneOf([204]);\r",
+                  "});\r",
+                  ""
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/admin/comments/:commentId",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "admin",
+                "comments",
+                ":commentId"
+              ],
+              "variable": [
+                {
+                  "key": "commentId",
+                  "value": "3"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Поиск всех Comments у События  ID = 1 (eventId:1) после удаления Comment-3",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Ответ должен содержать код статуса 200\", function () {\r",
+                  "    pm.response.to.be.ok;\r",
+                  "});\r",
+                  "pm.test(\"Список комментариев в ответе\", function () {\r",
+                  "    pm.response.to.be.withBody;\r",
+                  "    pm.response.to.be.json;\r",
+                  "    var jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData.length, 'List length must be 2').to.eql(2);\r",
+                  "});\r",
+                  ""
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/admin/comments/event/:eventId?from=0&size=100",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "admin",
+                "comments",
+                "event",
+                ":eventId"
+              ],
+              "query": [
+                {
+                  "key": "from",
+                  "value": "0"
+                },
+                {
+                  "key": "size",
+                  "value": "100"
+                }
+              ],
+              "variable": [
+                {
+                  "key": "eventId",
+                  "value": "1"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Admin Errors",
+      "item": [
+        {
+          "name": "Admin. Добавление комментария. Нет UserId == 999. Ошибка 404!",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Ответ должен содержать код статуса 404 и данные в формате json\", function () {\r",
+                  "    pm.response.to.be.notFound;    \r",
+                  "    pm.response.to.be.withBody;\r",
+                  "    pm.response.to.be.json;\r",
+                  "});\r",
+                  "\r",
+                  "const target = pm.response.json();\r",
+                  "\r",
+                  "pm.test(\"Ошибка должна содержать поле: status\", function () {\r",
+                  "    pm.expect(target).to.have.property('status');\r",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"text\": \"Comment-404\",\r\n  \"userId\": 999,\r\n  \"eventId\": 1\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/admin/comments",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "admin",
+                "comments"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Admin. Добавление комментария. Нет EventId == 999. Ошибка 404!",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Ответ должен содержать код статуса 404 и данные в формате json\", function () {\r",
+                  "    pm.response.to.be.notFound;    \r",
+                  "    pm.response.to.be.withBody;\r",
+                  "    pm.response.to.be.json;\r",
+                  "});\r",
+                  "\r",
+                  "const target = pm.response.json();\r",
+                  "\r",
+                  "pm.test(\"Ошибка должна содержать поле: status\", function () {\r",
+                  "    pm.expect(target).to.have.property('status');\r",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"text\": \"Comment-404\",\r\n  \"userId\": 1,\r\n  \"eventId\": 999\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/admin/comments",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "admin",
+                "comments"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Admin. Обновление Comment-2. Не пренадлежит событию. Ошибка 409!",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Ответ должен содержать код статуса 409 и данные в формате json\", function () {\r",
+                  "    pm.response.to.be.clientError;    \r",
+                  "    pm.response.to.be.withBody;\r",
+                  "    pm.response.to.be.json;\r",
+                  "});\r",
+                  "\r",
+                  "const target = pm.response.json();\r",
+                  "\r",
+                  "pm.test(\"Ошибка должна содержать поле: status\", function () {\r",
+                  "    pm.expect(target).to.have.property('status');\r",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"text\": \"Comment-409\",\r\n  \"userId\": 2,\r\n  \"eventId\": 3,\r\n  \"commentStateDto\": \"PUBLISHED\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/admin/comments/:commentId",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "admin",
+                "comments",
+                ":commentId"
+              ],
+              "variable": [
+                {
+                  "key": "commentId",
+                  "value": "2"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Admin. Поиск Comment-3 после удаления. Ошибка 404!",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Ответ должен содержать код статуса 404 и данные в формате json\", function () {\r",
+                  "    pm.response.to.be.notFound;    \r",
+                  "    pm.response.to.be.withBody;\r",
+                  "    pm.response.to.be.json;\r",
+                  "});\r",
+                  "\r",
+                  "const target = pm.response.json();\r",
+                  "\r",
+                  "pm.test(\"Ошибка должна содержать поле: status\", function () {\r",
+                  "    pm.expect(target).to.have.property('status');\r",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/admin/comments/:commentId",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "admin",
+                "comments",
+                ":commentId"
+              ],
+              "variable": [
+                {
+                  "key": "commentId",
+                  "value": "3"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Private",
+      "item": [
+        {
+          "name": "Добавление Comment-4 (userId:5, eventId:3)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Ответ должен содержать код статуса 201 и данные в формате json\", function () {\r",
+                  "    pm.response.to.have.status(201);  \r",
+                  "    pm.response.to.be.withBody;\r",
+                  "    pm.response.to.be.json;\r",
+                  "});\r",
+                  "\r",
+                  "const source = JSON.parse(pm.request.body.raw);\r",
+                  "const target = pm.response.json();\r",
+                  "\r",
+                  "pm.test(\"Комментарий должен содержать поля: id, text, createdOn, author, event, state\", function () {\r",
+                  "pm.expect(target).to.have.property('id');\r",
+                  "pm.expect(target).to.have.property('text');\r",
+                  "pm.expect(target).to.have.property('createdOn');\r",
+                  "pm.expect(target).to.have.property('author');\r",
+                  "pm.expect(target).to.have.property('event');\r",
+                  "pm.expect(target).to.have.property('state');\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Данные в ответе должны соответствовать данным в запросе\", function () {\r",
+                  "    pm.expect(target.id).to.not.be.null;\r",
+                  "    pm.expect(target.text).equal(source.text, 'Название крмментария должно совпадать с отправленным');\r",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"text\": \"Comment-4\",\r\n  \"userId\": 5,\r\n  \"eventId\": 3\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/private/comments",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "private",
+                "comments"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Обновление Comment-4",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Ответ должен содержать код статуса 200 и данные в формате json\", function () {\r",
+                  "    pm.response.to.have.status(200);  \r",
+                  "    pm.response.to.be.withBody;\r",
+                  "    pm.response.to.be.json;\r",
+                  "});\r",
+                  "\r",
+                  "const source = JSON.parse(pm.request.body.raw);\r",
+                  "const target = pm.response.json();\r",
+                  "\r",
+                  "pm.test(\"Комментарий должен содержать поля: id, text, createdOn, author, event, state\", function () {\r",
+                  "pm.expect(target).to.have.property('id');\r",
+                  "pm.expect(target).to.have.property('text');\r",
+                  "pm.expect(target).to.have.property('createdOn');\r",
+                  "pm.expect(target).to.have.property('author');\r",
+                  "pm.expect(target).to.have.property('event');\r",
+                  "pm.expect(target).to.have.property('state');\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Данные в ответе должны соответствовать данным в запросе\", function () {\r",
+                  "    pm.expect(target.id).to.not.be.null;\r",
+                  "    pm.expect(target.text).equal(source.text, 'Название крмментария должно совпадать с отправленным');\r",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"text\": \"Comment-4-Private-Update\",\r\n  \"userId\": 5,\r\n  \"eventId\": 3\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/private/comments/:commentId",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "private",
+                "comments",
+                ":commentId"
+              ],
+              "variable": [
+                {
+                  "key": "commentId",
+                  "value": "4"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Добавление Comment-5 (userId:6, eventId:4)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Ответ должен содержать код статуса 201 и данные в формате json\", function () {\r",
+                  "    pm.response.to.have.status(201);  \r",
+                  "    pm.response.to.be.withBody;\r",
+                  "    pm.response.to.be.json;\r",
+                  "});\r",
+                  "\r",
+                  "const source = JSON.parse(pm.request.body.raw);\r",
+                  "const target = pm.response.json();\r",
+                  "\r",
+                  "pm.test(\"Комментарий должен содержать поля: id, text, createdOn, author, event, state\", function () {\r",
+                  "pm.expect(target).to.have.property('id');\r",
+                  "pm.expect(target).to.have.property('text');\r",
+                  "pm.expect(target).to.have.property('createdOn');\r",
+                  "pm.expect(target).to.have.property('author');\r",
+                  "pm.expect(target).to.have.property('event');\r",
+                  "pm.expect(target).to.have.property('state');\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Данные в ответе должны соответствовать данным в запросе\", function () {\r",
+                  "    pm.expect(target.id).to.not.be.null;\r",
+                  "    pm.expect(target.text).equal(source.text, 'Название крмментария должно совпадать с отправленным');\r",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"text\": \"Comment-5\",\r\n  \"userId\": 6,\r\n  \"eventId\": 4\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/private/comments",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "private",
+                "comments"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Обновление Comment-5 (userId:6, eventId:4)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Ответ должен содержать код статуса 200 и данные в формате json\", function () {\r",
+                  "    pm.response.to.have.status(200);  \r",
+                  "    pm.response.to.be.withBody;\r",
+                  "    pm.response.to.be.json;\r",
+                  "});\r",
+                  "\r",
+                  "const source = JSON.parse(pm.request.body.raw);\r",
+                  "const target = pm.response.json();\r",
+                  "\r",
+                  "pm.test(\"Комментарий должен содержать поля: id, text, createdOn, author, event, state\", function () {\r",
+                  "pm.expect(target).to.have.property('id');\r",
+                  "pm.expect(target).to.have.property('text');\r",
+                  "pm.expect(target).to.have.property('createdOn');\r",
+                  "pm.expect(target).to.have.property('author');\r",
+                  "pm.expect(target).to.have.property('event');\r",
+                  "pm.expect(target).to.have.property('state');\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Данные в ответе должны соответствовать данным в запросе\", function () {\r",
+                  "    pm.expect(target.id).to.not.be.null;\r",
+                  "    pm.expect(target.text).equal(source.text, 'Название крмментария должно совпадать с отправленным');\r",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"text\": \"Comment-5-Private-Update\",\r\n  \"userId\": 6,\r\n  \"eventId\": 4\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/private/comments/:commentId",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "private",
+                "comments",
+                ":commentId"
+              ],
+              "variable": [
+                {
+                  "key": "commentId",
+                  "value": "5"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Поиск Comment-5 по ID владелеца (userId:6, commentId:5)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Ответ должен содержать код статуса 200 и данные в формате json\", function () {\r",
+                  "    pm.response.to.be.ok;    \r",
+                  "    pm.response.to.be.withBody;\r",
+                  "    pm.response.to.be.json;\r",
+                  "});\r",
+                  "\r",
+                  "const target = pm.response.json();\r",
+                  "\r",
+                  "pm.test(\"Комментарий должен содержать поля: id, text, createdOn, author, event, state\", function () {\r",
+                  "pm.expect(target).to.have.property('id');\r",
+                  "pm.expect(target).to.have.property('text');\r",
+                  "pm.expect(target).to.have.property('createdOn');\r",
+                  "pm.expect(target).to.have.property('author');\r",
+                  "pm.expect(target).to.have.property('event');\r",
+                  "pm.expect(target).to.have.property('state');\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Соотвествие id\", function () {\r",
+                  "    pm.expect(target.id).to.eql(5);\r",
+                  "});\r",
+                  "pm.test(\"Соотвествие text\", function () {\r",
+                  "    pm.expect(target.text).to.eql(\"Comment-5-Private-Update\");\r",
+                  "});\r",
+                  "pm.test(\"Соотвествие author.id\", function () {\r",
+                  "    pm.expect(target.author.id).to.eql(6);\r",
+                  "});\r",
+                  "pm.test(\"Соотвествие event.id\", function () {\r",
+                  "    pm.expect(target.event.id).to.eql(4);\r",
+                  "});\r",
+                  "pm.test(\"Соотвествие state\", function () {\r",
+                  "    pm.expect(target.state).to.eql(\"UPDATE\");\r",
+                  "});\r",
+                  ""
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/private/comments/:commentId/user/:userId",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "private",
+                "comments",
+                ":commentId",
+                "user",
+                ":userId"
+              ],
+              "variable": [
+                {
+                  "key": "commentId",
+                  "value": "5"
+                },
+                {
+                  "key": "userId",
+                  "value": "6"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Поиск всех Comments у События  ID = 1 (eventId:1, userId:1)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Ответ должен содержать код статуса 200\", function () {\r",
+                  "    pm.response.to.be.ok;\r",
+                  "});\r",
+                  "pm.test(\"Список комментариев в ответе\", function () {\r",
+                  "    pm.response.to.be.withBody;\r",
+                  "    pm.response.to.be.json;\r",
+                  "    var jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData.length, 'List length must be 1').to.eql(1);\r",
+                  "});\r",
+                  ""
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/private/comments/event/:eventId/user/:userId",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "private",
+                "comments",
+                "event",
+                ":eventId",
+                "user",
+                ":userId"
+              ],
+              "variable": [
+                {
+                  "key": "eventId",
+                  "value": "1"
+                },
+                {
+                  "key": "userId",
+                  "value": "1"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Удаление Comment-5 (userId:6, commentId:5)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Ответ должен содержать код статуса 204\", function () {\r",
+                  "    pm.expect(pm.response.code).to.be.oneOf([204]);\r",
+                  "});\r",
+                  ""
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/private/comments/:commentId/user/:userId",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "private",
+                "comments",
+                ":commentId",
+                "user",
+                ":userId"
+              ],
+              "variable": [
+                {
+                  "key": "commentId",
+                  "value": "5"
+                },
+                {
+                  "key": "userId",
+                  "value": "6"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Private Errors",
+      "item": [
+        {
+          "name": "Private. Добавление комментария. Нет UserId == 999. Ошибка 404!",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Ответ должен содержать код статуса 404 и данные в формате json\", function () {\r",
+                  "    pm.response.to.be.notFound;    \r",
+                  "    pm.response.to.be.withBody;\r",
+                  "    pm.response.to.be.json;\r",
+                  "});\r",
+                  "\r",
+                  "const target = pm.response.json();\r",
+                  "\r",
+                  "pm.test(\"Ошибка должна содержать поле: status\", function () {\r",
+                  "    pm.expect(target).to.have.property('status');\r",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"text\": \"Comment-404\",\r\n  \"userId\": 999,\r\n  \"eventId\": 1\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/private/comments",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "private",
+                "comments"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Private. Добавление комментария. Нет EventId == 999. Ошибка 404!",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Ответ должен содержать код статуса 404 и данные в формате json\", function () {\r",
+                  "    pm.response.to.be.notFound;    \r",
+                  "    pm.response.to.be.withBody;\r",
+                  "    pm.response.to.be.json;\r",
+                  "});\r",
+                  "\r",
+                  "const target = pm.response.json();\r",
+                  "\r",
+                  "pm.test(\"Ошибка должна содержать поле: status\", function () {\r",
+                  "    pm.expect(target).to.have.property('status');\r",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"text\": \"Comment-404\",\r\n  \"userId\": 2,\r\n  \"eventId\": 999\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/private/comments",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "private",
+                "comments"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Private. Обновление Comment-5. Не принадлежит событию. Ошибка 409!",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Ответ должен содержать код статуса 409 и данные в формате json\", function () {\r",
+                  "    pm.response.to.be.clientError;    \r",
+                  "    pm.response.to.be.withBody;\r",
+                  "    pm.response.to.be.json;\r",
+                  "});\r",
+                  "\r",
+                  "const target = pm.response.json();\r",
+                  "\r",
+                  "pm.test(\"Ошибка должна содержать поле: status\", function () {\r",
+                  "    pm.expect(target).to.have.property('status');\r",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"text\": \"Comment-409\",\r\n  \"userId\": 6,\r\n  \"eventId\": 1\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/private/comments/:commentId",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "private",
+                "comments",
+                ":commentId"
+              ],
+              "variable": [
+                {
+                  "key": "commentId",
+                  "value": "5"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Private. Обновление Comment-5. Не принадлежит пользователю. Ошибка 409!",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Ответ должен содержать код статуса 409 и данные в формате json\", function () {\r",
+                  "    pm.response.to.be.clientError;    \r",
+                  "    pm.response.to.be.withBody;\r",
+                  "    pm.response.to.be.json;\r",
+                  "});\r",
+                  "\r",
+                  "const target = pm.response.json();\r",
+                  "\r",
+                  "pm.test(\"Ошибка должна содержать поле: status\", function () {\r",
+                  "    pm.expect(target).to.have.property('status');\r",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"text\": \"Comment-404\",\r\n  \"userId\": 1,\r\n  \"eventId\": 4\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/private/comments/:commentId",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "private",
+                "comments",
+                ":commentId"
+              ],
+              "variable": [
+                {
+                  "key": "commentId",
+                  "value": "5"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Private. Поиск Comment-5 по ID не принадлежит пользователю UserID == 1. Ошибка 409!",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Ответ должен содержать код статуса 409 и данные в формате json\", function () {\r",
+                  "    pm.response.to.be.clientError;    \r",
+                  "    pm.response.to.be.withBody;\r",
+                  "    pm.response.to.be.json;\r",
+                  "});\r",
+                  "\r",
+                  "const target = pm.response.json();\r",
+                  "\r",
+                  "pm.test(\"Ошибка должна содержать поле: status\", function () {\r",
+                  "    pm.expect(target).to.have.property('status');\r",
+                  "});\r",
+                  ""
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/private/comments/:commentId/user/:userId",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "private",
+                "comments",
+                ":commentId",
+                "user",
+                ":userId"
+              ],
+              "variable": [
+                {
+                  "key": "commentId",
+                  "value": "5"
+                },
+                {
+                  "key": "userId",
+                  "value": "1"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Private. Удаление Comment-5. Не владелец. Ошибка 409!",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Ответ должен содержать код статуса 409 и данные в формате json\", function () {\r",
+                  "    pm.response.to.be.clientError;    \r",
+                  "    pm.response.to.be.withBody;\r",
+                  "    pm.response.to.be.json;\r",
+                  "});\r",
+                  "\r",
+                  "const target = pm.response.json();\r",
+                  "\r",
+                  "pm.test(\"Ошибка должна содержать поле: status\", function () {\r",
+                  "    pm.expect(target).to.have.property('status');\r",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/private/comments/:commentId/user/:userId",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "private",
+                "comments",
+                ":commentId",
+                "user",
+                ":userId"
+              ],
+              "variable": [
+                {
+                  "key": "commentId",
+                  "value": "5"
+                },
+                {
+                  "key": "userId",
+                  "value": "1"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Private. Поиск Comment-5 после удаления. Ошибка 404!",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Ответ должен содержать код статуса 404 и данные в формате json\", function () {\r",
+                  "    pm.response.to.be.notFound;    \r",
+                  "    pm.response.to.be.withBody;\r",
+                  "    pm.response.to.be.json;\r",
+                  "});\r",
+                  "\r",
+                  "const target = pm.response.json();\r",
+                  "\r",
+                  "pm.test(\"Ошибка должна содержать поле: status\", function () {\r",
+                  "    pm.expect(target).to.have.property('status');\r",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/private/comments/:commentId/user/:userId",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "private",
+                "comments",
+                ":commentId",
+                "user",
+                ":userId"
+              ],
+              "variable": [
+                {
+                  "key": "commentId",
+                  "value": "5"
+                },
+                {
+                  "key": "userId",
+                  "value": "6"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Public",
+      "item": [
+        {
+          "name": "Поиск всех Comments по событию ID == 1 (eventId:1)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Ответ должен содержать код статуса 200\", function () {\r",
+                  "    pm.response.to.be.ok;\r",
+                  "});\r",
+                  "pm.test(\"Список комментариев в ответе\", function () {\r",
+                  "    pm.response.to.be.withBody;\r",
+                  "    pm.response.to.be.json;\r",
+                  "    var jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData.length, 'List length must be 2').to.eql(2);\r",
+                  "});\r",
+                  ""
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/comments/event/:eventId?from=0&size=55",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "comments",
+                "event",
+                ":eventId"
+              ],
+              "query": [
+                {
+                  "key": "from",
+                  "value": "0"
+                },
+                {
+                  "key": "size",
+                  "value": "55"
+                }
+              ],
+              "variable": [
+                {
+                  "key": "eventId",
+                  "value": "1"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Добавление Comment-6 (userId:1, eventId:1)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Ответ должен содержать код статуса 201 и данные в формате json\", function () {\r",
+                  "    pm.response.to.have.status(201);  \r",
+                  "    pm.response.to.be.withBody;\r",
+                  "    pm.response.to.be.json;\r",
+                  "});\r",
+                  "\r",
+                  "const source = JSON.parse(pm.request.body.raw);\r",
+                  "const target = pm.response.json();\r",
+                  "\r",
+                  "pm.test(\"Комментарий должен содержать поля: id, text, createdOn, author, event, state\", function () {\r",
+                  "pm.expect(target).to.have.property('id');\r",
+                  "pm.expect(target).to.have.property('text');\r",
+                  "pm.expect(target).to.have.property('createdOn');\r",
+                  "pm.expect(target).to.have.property('author');\r",
+                  "pm.expect(target).to.have.property('event');\r",
+                  "pm.expect(target).to.have.property('state');\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Данные в ответе должны соответствовать данным в запросе\", function () {\r",
+                  "    pm.expect(target.id).to.not.be.null;\r",
+                  "    pm.expect(target.text).equal(source.text, 'Название крмментария должно совпадать с отправленным');\r",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"text\": \"Comment-6\",\r\n  \"userId\": 1,\r\n  \"eventId\": 1\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/private/comments",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "private",
+                "comments"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Обновление Comment-6 (userId:1, eventId:1)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Ответ должен содержать код статуса 200 и данные в формате json\", function () {\r",
+                  "    pm.response.to.have.status(200);  \r",
+                  "    pm.response.to.be.withBody;\r",
+                  "    pm.response.to.be.json;\r",
+                  "});\r",
+                  "\r",
+                  "const source = JSON.parse(pm.request.body.raw);\r",
+                  "const target = pm.response.json();\r",
+                  "\r",
+                  "pm.test(\"Комментарий должен содержать поля: id, text, createdOn, author, event, state\", function () {\r",
+                  "pm.expect(target).to.have.property('id');\r",
+                  "pm.expect(target).to.have.property('text');\r",
+                  "pm.expect(target).to.have.property('createdOn');\r",
+                  "pm.expect(target).to.have.property('author');\r",
+                  "pm.expect(target).to.have.property('event');\r",
+                  "pm.expect(target).to.have.property('state');\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Данные в ответе должны соответствовать данным в запросе\", function () {\r",
+                  "    pm.expect(target.id).to.not.be.null;\r",
+                  "    pm.expect(target.text).equal(source.text, 'Название крмментария должно совпадать с отправленным');\r",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"text\": \"Comment-6-Admin-Update\",\r\n  \"userId\": 1,\r\n  \"eventId\": 1,\r\n  \"commentStateDto\": \"PUBLISHED\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/admin/comments/:commentId",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "admin",
+                "comments",
+                ":commentId"
+              ],
+              "variable": [
+                {
+                  "key": "commentId",
+                  "value": "6"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Обновление Comment-1 (userId:2, eventId:1)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Ответ должен содержать код статуса 200 и данные в формате json\", function () {\r",
+                  "    pm.response.to.have.status(200);  \r",
+                  "    pm.response.to.be.withBody;\r",
+                  "    pm.response.to.be.json;\r",
+                  "});\r",
+                  "\r",
+                  "const source = JSON.parse(pm.request.body.raw);\r",
+                  "const target = pm.response.json();\r",
+                  "\r",
+                  "pm.test(\"Комментарий должен содержать поля: id, text, createdOn, author, event, state\", function () {\r",
+                  "pm.expect(target).to.have.property('id');\r",
+                  "pm.expect(target).to.have.property('text');\r",
+                  "pm.expect(target).to.have.property('createdOn');\r",
+                  "pm.expect(target).to.have.property('author');\r",
+                  "pm.expect(target).to.have.property('event');\r",
+                  "pm.expect(target).to.have.property('state');\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Данные в ответе должны соответствовать данным в запросе\", function () {\r",
+                  "    pm.expect(target.id).to.not.be.null;\r",
+                  "    pm.expect(target.text).equal(source.text, 'Название крмментария должно совпадать с отправленным');\r",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"text\": \"Comment-1-Admin-Update\",\r\n  \"userId\": 2,\r\n  \"eventId\": 1,\r\n  \"commentStateDto\": \"CANCELED\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/admin/comments/:commentId",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "admin",
+                "comments",
+                ":commentId"
+              ],
+              "variable": [
+                {
+                  "key": "commentId",
+                  "value": "1"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Поиск всех Comments по ID события == 1 поле редактирования  Comments",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Ответ должен содержать код статуса 200\", function () {\r",
+                  "    pm.response.to.be.ok;\r",
+                  "});\r",
+                  "pm.test(\"Список комментариев в ответе\", function () {\r",
+                  "    pm.response.to.be.withBody;\r",
+                  "    pm.response.to.be.json;\r",
+                  "    var jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData.length, 'List length must be 2').to.eql(2);\r",
+                  "});\r",
+                  ""
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/comments/event/:eventId?from=0&size=101",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "comments",
+                "event",
+                ":eventId"
+              ],
+              "query": [
+                {
+                  "key": "from",
+                  "value": "0"
+                },
+                {
+                  "key": "size",
+                  "value": "101"
+                }
+              ],
+              "variable": [
+                {
+                  "key": "eventId",
+                  "value": "1"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Public Errors",
+      "item": [
+        {
+          "name": "Public. Поиск всех Comments по событию ID == 999. Ошибка 404!",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Ответ должен содержать код статуса 404 и данные в формате json\", function () {\r",
+                  "    pm.response.to.be.notFound;    \r",
+                  "    pm.response.to.be.withBody;\r",
+                  "    pm.response.to.be.json;\r",
+                  "});\r",
+                  "\r",
+                  "const target = pm.response.json();\r",
+                  "\r",
+                  "pm.test(\"Ошибка должна содержать поле: status\", function () {\r",
+                  "    pm.expect(target).to.have.property('status');\r",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/comments/event/:eventId?from=0&size=99",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "comments",
+                "event",
+                ":eventId"
+              ],
+              "query": [
+                {
+                  "key": "from",
+                  "value": "0"
+                },
+                {
+                  "key": "size",
+                  "value": "99"
+                }
+              ],
+              "variable": [
+                {
+                  "key": "eventId",
+                  "value": "999"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Other Errors",
+      "item": [
+        {
+          "name": "Comment содержит более 7000 символов. Ошибка 400!",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  ""
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"text\": \"Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. \",\r\n  \"userId\": 1,\r\n  \"eventId\": 1\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/admin/comments",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "admin",
+                "comments"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Comment UserId == null. Ошибка 400!",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  ""
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"text\": \"Comment-400\",\r\n  \"userId\": null,\r\n  \"eventId\": 1\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/admin/comments",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "admin",
+                "comments"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Comment EventId == null. Ошибка 400!",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  ""
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"text\": \"Comment-400\",\r\n  \"userId\": 1,\r\n  \"eventId\": null\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/admin/comments",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "admin",
+                "comments"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Comment содержит более 7000 символов. Ошибка 400!",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  ""
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"text\": \"Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. Этот текст содержит более 7000 символов. \",\r\n  \"userId\": 1,\r\n  \"eventId\": 1,\r\n  \"commentStateDto\": \"PUBLISHED\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/admin/comments/:commentId",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "admin",
+                "comments",
+                ":commentId"
+              ],
+              "variable": [
+                {
+                  "key": "commentId",
+                  "value": "1"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Comment UserId == null. Ошибка 400!",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  ""
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"text\": \"Incidunt eveniet ratione sint aspernatur.\",\r\n  \"userId\": null,\r\n  \"eventId\": 1,\r\n  \"commentStateDto\": \"PUBLISHED\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/admin/comments/:commentId",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "admin",
+                "comments",
+                ":commentId"
+              ],
+              "variable": [
+                {
+                  "key": "commentId",
+                  "value": "1"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Comment EventId == null. Ошибка 400!",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  ""
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"text\": \"Incidunt eveniet ratione sint aspernatur.\",\r\n  \"userId\": 1,\r\n  \"eventId\": null,\r\n  \"commentStateDto\": \"PUBLISHED\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/admin/comments/:commentId",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "admin",
+                "comments",
+                ":commentId"
+              ],
+              "variable": [
+                {
+                  "key": "commentId",
+                  "value": "1"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ],
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              ""
+            ]
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Ответ должен содержать код статуса ошибки и данные в формате json\", function () {",
+              "    pm.response.to.be.clientError;    ",
+              "    pm.response.to.be.withBody;",
+              "    pm.response.to.be.json;",
+              "});",
+              "",
+              "const target = pm.response.json();",
+              "",
+              "pm.test(\"Ошибка должна содержать поле: status\", function () {",
+              "    pm.expect(target).to.have.property('status');",
+              "});"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Pagination Errors",
+      "item": [
+        {
+          "name": "Проверка пагинации FROM == -1, SIZE == 100. Ошибка 500!",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Ответ должен содержать код статуса 500 и данные в формате json\", function () {\r",
+                  "    pm.response.to.be.serverError;    \r",
+                  "    pm.response.to.be.withBody;\r",
+                  "    pm.response.to.be.json;\r",
+                  "});\r",
+                  "\r",
+                  "const target = pm.response.json();\r",
+                  "\r",
+                  "pm.test(\"Ошибка должна содержать поле: status\", function () {\r",
+                  "    pm.expect(target).to.have.property('status');\r",
+                  "});\r",
+                  ""
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/admin/comments/event/:eventId?from=-1&size=100",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "admin",
+                "comments",
+                "event",
+                ":eventId"
+              ],
+              "query": [
+                {
+                  "key": "from",
+                  "value": "-1"
+                },
+                {
+                  "key": "size",
+                  "value": "100"
+                }
+              ],
+              "variable": [
+                {
+                  "key": "eventId",
+                  "value": "1"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Проверка пагинации FROM == 0, SIZE == -10. Ошибка 500!",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Ответ должен содержать код статуса 500 и данные в формате json\", function () {\r",
+                  "    pm.response.to.be.serverError;    \r",
+                  "    pm.response.to.be.withBody;\r",
+                  "    pm.response.to.be.json;\r",
+                  "});\r",
+                  "\r",
+                  "const target = pm.response.json();\r",
+                  "\r",
+                  "pm.test(\"Ошибка должна содержать поле: status\", function () {\r",
+                  "    pm.expect(target).to.have.property('status');\r",
+                  "});\r",
+                  ""
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/admin/comments/event/:eventId?from=0&size=-10",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "admin",
+                "comments",
+                "event",
+                ":eventId"
+              ],
+              "query": [
+                {
+                  "key": "from",
+                  "value": "0"
+                },
+                {
+                  "key": "size",
+                  "value": "-10"
+                }
+              ],
+              "variable": [
+                {
+                  "key": "eventId",
+                  "value": "1"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}

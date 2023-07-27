@@ -4,6 +4,7 @@ import lombok.experimental.UtilityClass;
 import ru.practicum.models.Category;
 import ru.practicum.models.Event;
 import ru.practicum.models.User;
+import ru.practicum.models.dto.EventCommentDto;
 import ru.practicum.models.dto.EventFullDto;
 import ru.practicum.models.dto.EventShortDto;
 import ru.practicum.models.dto.NewEventDto;
@@ -25,7 +26,7 @@ public class EventMapper {
      * @param event Объект Event
      * @return Преобразованный объект EventShortDto
      */
-    public EventShortDto eventToeventShortDto(Event event) {
+    public EventShortDto eventToEventShortDto(Event event) {
         return EventShortDto.builder()
                 .annotation(event.getAnnotation())
                 .category(CategoryMapper.categoryToCategoryDto(event.getCategory()))
@@ -76,8 +77,8 @@ public class EventMapper {
      * @param confirmedRequests Количество одобренных заявок на участие в данном событии
      * @return Преобразованный объект Event
      */
-    public static Event newEventDtoToCreateEvent(NewEventDto newEventDto, User user, Category category, Long views,
-                                                 Long confirmedRequests) {
+    public Event newEventDtoToCreateEvent(NewEventDto newEventDto, User user, Category category, Long views,
+                                          Long confirmedRequests) {
         LocalDateTime dateTime = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
         return Event.builder()
                 .annotation(newEventDto.getAnnotation())
@@ -95,6 +96,17 @@ public class EventMapper {
                 .state(EventState.PENDING)
                 .title(newEventDto.getTitle())
                 .views(views)
+                .build();
+    }
+
+    public EventCommentDto eventToEventCommentDto(Event event) {
+        return EventCommentDto.builder()
+                .annotation(event.getAnnotation())
+                .category(CategoryMapper.categoryToCategoryDto(event.getCategory()))
+                .eventDate(event.getEventDate())
+                .id(event.getId())
+                .initiator(UserMapper.userToUserShortDto(event.getInitiator()))
+                .title(event.getTitle())
                 .build();
     }
 }
