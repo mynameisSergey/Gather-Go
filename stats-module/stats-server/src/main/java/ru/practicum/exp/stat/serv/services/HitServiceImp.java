@@ -23,7 +23,7 @@ public class HitServiceImp implements HitService {
     @Transactional
     public void create(HitDto hitDto) {
         Hit hit = HitMapper.toHit(hitDto);
-        log.info("Запрос {} ", hitDto.getUri());
+        log.info("Информация о запросе {}", hitDto.getUri());
         hitRepository.save(hit);
     }
 }

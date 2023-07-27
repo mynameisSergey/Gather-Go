@@ -1,6 +1,7 @@
 package ru.practicum.exp.stat.dto;
 
-import lombok.*;
+import lombok.Builder;
+import lombok.Value;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
@@ -8,9 +9,7 @@ import javax.validation.constraints.Pattern;
 /**
  * Модель объекта Hit Data Transfer Object
  */
-@Data
-@AllArgsConstructor
-@NoArgsConstructor(force = true)
+@Value
 @Builder
 public class HitDto {
 
