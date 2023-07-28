@@ -38,7 +38,7 @@ public class CommentsPrivateServiceImp implements CommentsPrivateService {
     private final CommentsRepository commentsRepository;
 
     @Override
-    public CommentDto getCommentDtoByIdOfCommentAndUser(Long commentId, Long userId) {
+    public CommentDto get(Long commentId, Long userId) {
         Comment comment = commentsRepository.get(commentId);
         User user = userRepository.get(userId);
         checkCommentOnOwner(comment, user);
@@ -47,7 +47,7 @@ public class CommentsPrivateServiceImp implements CommentsPrivateService {
     }
 
     @Override
-    public List<CommentDto> getListCommentDto(Long eventId, Long userId, Integer from, Integer size) {
+    public List<CommentDto> get(Long eventId, Long userId, Integer from, Integer size) {
         Event event = eventRepository.get(eventId);
         User user = userRepository.get(userId);
         Pageable pageable = PageRequest.of(from, size);
@@ -59,7 +59,7 @@ public class CommentsPrivateServiceImp implements CommentsPrivateService {
 
     @Override
     @Transactional
-    public CommentDto createCommentDto(InputCommentDto inputCommentDto) {
+    public CommentDto create(InputCommentDto inputCommentDto) {
         Event event = eventRepository.get(inputCommentDto.getEventId());
         User user = userRepository.get(inputCommentDto.getUserId());
         Comment comment = CommentsMapper.createComment(inputCommentDto, user, event);
@@ -70,7 +70,7 @@ public class CommentsPrivateServiceImp implements CommentsPrivateService {
 
     @Override
     @Transactional
-    public CommentDto updateCommentDto(Long commentId, InputCommentDto inputCommentDto) {
+    public CommentDto update(Long commentId, InputCommentDto inputCommentDto) {
         Comment comment = commentsRepository.get(commentId);
         if (comment.getState().equals(CommentState.CANCELED)) {
             throw new BadRequestException("Комментарий с id:" + comment.getId() + " ранее был отменен");
@@ -89,7 +89,7 @@ public class CommentsPrivateServiceImp implements CommentsPrivateService {
 
     @Override
     @Transactional
-    public void deleteCommentDtoById(Long commentId, Long userId) {
+    public void delete(Long commentId, Long userId) {
         User user = userRepository.get(userId);
         Comment comment = commentsRepository.get(commentId);
         checkCommentOnOwner(comment, user);
