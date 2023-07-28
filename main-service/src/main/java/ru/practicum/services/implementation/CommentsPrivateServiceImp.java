@@ -72,7 +72,7 @@ public class CommentsPrivateServiceImp implements CommentsPrivateService {
     @Transactional
     public CommentDto update(Long commentId, InputCommentDto inputCommentDto) {
         Comment comment = commentsRepository.get(commentId);
-        if (comment.getState().equals(CommentState.CANCELED)) {
+        if (comment.getState() == CommentState.CANCELED) {
             throw new BadRequestException("Комментарий с id:" + comment.getId() + " ранее был отменен");
         }
         Event event = eventRepository.get(inputCommentDto.getEventId());
