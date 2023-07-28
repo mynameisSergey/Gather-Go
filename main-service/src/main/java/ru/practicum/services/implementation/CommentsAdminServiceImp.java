@@ -38,13 +38,13 @@ public class CommentsAdminServiceImp implements CommentsAdminService {
     private final UserRepository userRepository;
 
     @Override
-    public CommentDto get(Long id) {
+    public CommentDto getCommentDtoById(Long id) {
         log.info("Получен запрос на поиск комментария по id: {}", id);
         return CommentsMapper.commentToCommentDto(commentsRepository.get(id));
     }
 
     @Override
-    public List<CommentDto> get(Long id, Integer from, Integer size) {
+    public List<CommentDto> getListCommentDtoById(Long id, Integer from, Integer size) {
         Event event = eventRepository.get(id);
         Pageable pageable = PageRequest.of(from, size);
         List<Comment> comments = commentsRepository.findByEvent(event, pageable);

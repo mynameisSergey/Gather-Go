@@ -31,7 +31,7 @@ public class CommentsAdminController {
      */
     @GetMapping("/{commentId}")
     public CommentDto get(@PathVariable Long commentId) {
-        return commentsAdminService.get(commentId);
+        return commentsAdminService.getCommentDtoById(commentId);
     }
 
     /**
@@ -46,7 +46,7 @@ public class CommentsAdminController {
     public List<CommentDto> get(@PathVariable Long eventId,
                                 @PositiveOrZero @RequestParam(defaultValue = "0") Integer from,
                                 @Positive @RequestParam(defaultValue = "10") Integer size) {
-        return commentsAdminService.get(eventId, from, size);
+        return commentsAdminService.getListCommentDtoById(eventId, from, size);
     }
 
     /**
