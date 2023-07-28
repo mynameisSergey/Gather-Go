@@ -58,7 +58,7 @@ public class CommentsAdminController {
     @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
     public CommentDto create(@Validated @RequestBody InputCommentDto inputCommentDto) {
-        return commentsAdminService.create(inputCommentDto);
+        return commentsAdminService.createCommentDto(inputCommentDto);
     }
 
     /**
@@ -71,7 +71,7 @@ public class CommentsAdminController {
     @PatchMapping("/{commentId}")
     public CommentDto update(@PathVariable Long commentId,
                              @Validated @RequestBody UpdateCommentAdmin updateComment) {
-        return commentsAdminService.update(commentId, updateComment);
+        return commentsAdminService.updateCommentDto(commentId, updateComment);
     }
 
     /**
@@ -82,6 +82,6 @@ public class CommentsAdminController {
     @DeleteMapping("/{commentId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable Long commentId) {
-        commentsAdminService.delete(commentId);
+        commentsAdminService.deleteByCommentId(commentId);
     }
 }

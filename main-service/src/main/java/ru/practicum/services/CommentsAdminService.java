@@ -36,7 +36,7 @@ public interface CommentsAdminService {
      * @param inputCommentDto Новый комментарий в виде объекта InputCommentDto
      * @return Добавленный комментарий в виде объекта CommentDto
      */
-    CommentDto create(InputCommentDto inputCommentDto);
+    CommentDto createCommentDto(InputCommentDto inputCommentDto);
 
     /**
      * Метод изменения комментария по ID
@@ -45,12 +45,12 @@ public interface CommentsAdminService {
      * @param updateComment Новый изменённый комментарий в виде объекта UpdateCommentAdminDto
      * @return Изменённый комментарий в виде объекта CommentDto
      */
-    CommentDto update(Long id, UpdateCommentAdmin updateComment);
+    CommentDto updateCommentDto(Long id, UpdateCommentAdmin updateComment);
 
     /**
      * Метод удаления комментария по ID
      *
      * @param id ID комментария
      */
-    void delete(Long id);
+    void deleteByCommentId(Long id);
 }

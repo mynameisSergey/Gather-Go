@@ -17,7 +17,7 @@ public interface CommentsPrivateService {
      * @param userId    ID пользователя
      * @return Объект CommentDto
      */
-    CommentDto get(Long commentId, Long userId);
+    CommentDto getCommentDtoByIdOfCommentAndUser(Long commentId, Long userId);
 
     /**
      * Метод получения списка комментариев по ID события и ID пользователя
@@ -28,7 +28,7 @@ public interface CommentsPrivateService {
      * @param size    Количество комментариев в наборе
      * @return Список комментариев по событию
      */
-    List<CommentDto> get(Long eventId, Long userId, Integer from, Integer size);
+    List<CommentDto> getListCommentDto(Long eventId, Long userId, Integer from, Integer size);
 
     /**
      * Метод добавления комментария
@@ -36,7 +36,7 @@ public interface CommentsPrivateService {
      * @param inputCommentDto Новый комментарий в виде объекта InputCommentDto
      * @return Добавленный комментарий в виде объекта CommentDto
      */
-    CommentDto create(InputCommentDto inputCommentDto);
+    CommentDto createCommentDto(InputCommentDto inputCommentDto);
 
     /**
      * Метод изменения комментария по ID
@@ -45,7 +45,7 @@ public interface CommentsPrivateService {
      * @param inputCommentDto Новый изменённый комментарий в виде объекта InputCommentDto
      * @return Изменённый комментарий в виде объекта CommentDto
      */
-    CommentDto update(Long commentId, InputCommentDto inputCommentDto);
+    CommentDto updateCommentDto(Long commentId, InputCommentDto inputCommentDto);
 
     /**
      * Метод удаления по ID комментария и ID пользователя
@@ -53,5 +53,5 @@ public interface CommentsPrivateService {
      * @param commentId ID комментария
      * @param userId    ID пользователя
      */
-    void delete(Long commentId, Long userId);
+    void deleteCommentDtoById(Long commentId, Long userId);
 }

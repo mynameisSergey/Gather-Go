@@ -54,7 +54,7 @@ public class CommentsAdminServiceImp implements CommentsAdminService {
 
     @Override
     @Transactional
-    public CommentDto create(InputCommentDto inputCommentDto) {
+    public CommentDto createCommentDto(InputCommentDto inputCommentDto) {
         Event event = eventRepository.get(inputCommentDto.getEventId());
         User user = userRepository.get(inputCommentDto.getUserId());
         Comment comment = CommentsMapper.createComment(inputCommentDto, user, event);
@@ -65,7 +65,7 @@ public class CommentsAdminServiceImp implements CommentsAdminService {
 
     @Override
     @Transactional
-    public CommentDto update(Long id, UpdateCommentAdmin updateComment) {
+    public CommentDto updateCommentDto(Long id, UpdateCommentAdmin updateComment) {
         Event event = eventRepository.get(updateComment.getEventId());
         if (!userRepository.existsById(updateComment.getUserId())) {
             throw new ResourceNotFoundException("Пользователь c id: " + updateComment.getUserId() + " не найден");
@@ -87,7 +87,7 @@ public class CommentsAdminServiceImp implements CommentsAdminService {
 
     @Override
     @Transactional
-    public void delete(Long id) {
+    public void deleteByCommentId(Long id) {
         Comment comment = commentsRepository.get(id);
         log.info("Получен запрос на удаления комментария к commentId: {}", id);
         commentsRepository.delete(comment);
