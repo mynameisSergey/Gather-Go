@@ -49,7 +49,7 @@ public class CommentsPrivateController {
                                 @PathVariable Long userId,
                                 @PositiveOrZero @RequestParam(defaultValue = "0") Integer from,
                                 @Positive @RequestParam(defaultValue = "10") Integer size) {
-        return commentsPrivateService.get(eventId, userId, from, size);
+        return commentsPrivateService.getListCommentDtoByEventId(eventId, userId, from, size);
     }
 
     /**
@@ -61,7 +61,7 @@ public class CommentsPrivateController {
     @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
     public CommentDto create(@Validated @RequestBody InputCommentDto inputCommentDto) {
-        return commentsPrivateService.create(inputCommentDto);
+        return commentsPrivateService.createCommentDto(inputCommentDto);
     }
 
     /**
@@ -74,7 +74,7 @@ public class CommentsPrivateController {
     @PatchMapping("/{commentId}")
     public CommentDto update(@PathVariable Long commentId,
                              @Validated @RequestBody InputCommentDto inputCommentDto) {
-        return commentsPrivateService.update(commentId, inputCommentDto);
+        return commentsPrivateService.updateCommentDtoByCommentId(commentId, inputCommentDto);
     }
 
     /**
@@ -87,6 +87,6 @@ public class CommentsPrivateController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable Long commentId,
                        @PathVariable Long userId) {
-        commentsPrivateService.delete(commentId, userId);
+        commentsPrivateService.deleteCommentDtoByCommentId(commentId, userId);
     }
 }
