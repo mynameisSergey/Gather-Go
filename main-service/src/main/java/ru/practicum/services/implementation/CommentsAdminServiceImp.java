@@ -39,7 +39,7 @@ public class CommentsAdminServiceImp implements CommentsAdminService {
 
     @Override
     public CommentDto getCommentDtoById(Long id) {
-        log.info("Получен запрос на поиск комментария по id: {}", id);
+        log.info("Выполнен поиск комментария по id: {}", id);
         return CommentsMapper.commentToCommentDto(commentsRepository.get(id));
     }
 
@@ -48,7 +48,7 @@ public class CommentsAdminServiceImp implements CommentsAdminService {
         Event event = eventRepository.get(id);
         Pageable pageable = PageRequest.of(from, size);
         List<Comment> comments = commentsRepository.findByEvent(event, pageable);
-        log.info("Получен запрос на список всех комментариев по событию с id: {}, from: {}, size {}", id, from, size);
+        log.info("Выполнен поиск списка комментариев по событию с id: {}, from: {}, size {}", id, from, size);
         return comments.stream().map(CommentsMapper::commentToCommentDto).collect(Collectors.toList());
     }
 
@@ -58,7 +58,7 @@ public class CommentsAdminServiceImp implements CommentsAdminService {
         Event event = eventRepository.get(inputCommentDto.getEventId());
         User user = userRepository.get(inputCommentDto.getUserId());
         Comment comment = CommentsMapper.createComment(inputCommentDto, user, event);
-        log.info("Получен запрос на добавления комментария к eventId: {}, userId: {}",
+        log.info("Создан объект CommentDto для комментария с eventId: {}, userId: {}",
                 inputCommentDto.getEventId(), inputCommentDto.getUserId());
         return CommentsMapper.commentToCommentDto(commentsRepository.save(comment));
     }
@@ -81,7 +81,7 @@ public class CommentsAdminServiceImp implements CommentsAdminService {
         if (updateComment.getCommentStateDto() != null) {
             comment.setState(CommentsMapper.toCommentState(updateComment.getCommentStateDto()));
         }
-        log.info("Получен запрос на изменения комментария к commentId: {}, eventId: {}", id, event.getId());
+        log.info("Изменен комментарий с commentId: {}, eventId: {}", id, event.getId());
         return CommentsMapper.commentToCommentDto(commentsRepository.save(comment));
     }
 
@@ -89,7 +89,7 @@ public class CommentsAdminServiceImp implements CommentsAdminService {
     @Transactional
     public void deleteByCommentId(Long id) {
         Comment comment = commentsRepository.get(id);
-        log.info("Получен запрос на удаления комментария к commentId: {}", id);
+        log.info("Удален комментарий с commentId: {}", id);
         commentsRepository.delete(comment);
     }
 }

@@ -42,7 +42,7 @@ public class CommentsPrivateServiceImp implements CommentsPrivateService {
         Comment comment = commentsRepository.get(commentId);
         User user = userRepository.get(userId);
         checkCommentOnOwner(comment, user);
-        log.info("Получен приватный запрос на поиск commentId: {}, userId: {}", commentId, userId);
+        log.info("Выполнен приватный поиск комментария с commentId: {}, userId: {}", commentId, userId);
         return CommentsMapper.commentToCommentDto(comment);
     }
 
@@ -52,7 +52,7 @@ public class CommentsPrivateServiceImp implements CommentsPrivateService {
         User user = userRepository.get(userId);
         Pageable pageable = PageRequest.of(from, size);
         List<Comment> comments = commentsRepository.findByEventAndAuthor(event, user, pageable);
-        log.info("Получен приватный запрос на список всех комментариев по eventId: {}, userId: {}, from: {}, size {}",
+        log.info("Выполнен приватный поиск списка комментариев по eventId: {}, userId: {}, from: {}, size {}",
                 eventId, userId, from, size);
         return comments.stream().map(CommentsMapper::commentToCommentDto).collect(Collectors.toList());
     }
@@ -63,7 +63,7 @@ public class CommentsPrivateServiceImp implements CommentsPrivateService {
         Event event = eventRepository.get(inputCommentDto.getEventId());
         User user = userRepository.get(inputCommentDto.getUserId());
         Comment comment = CommentsMapper.createComment(inputCommentDto, user, event);
-        log.info("Получен приватный запрос на добавления комментария к eventId: {}, userId: {}",
+        log.info("Приватно создан объект CommentDto для комментария с eventId: {}, userId: {}",
                 inputCommentDto.getEventId(), inputCommentDto.getUserId());
         return CommentsMapper.commentToCommentDto(commentsRepository.save(comment));
     }
@@ -83,7 +83,7 @@ public class CommentsPrivateServiceImp implements CommentsPrivateService {
         }
         checkCommentOnOwner(comment, user);
         Comment newComment = CommentsMapper.updateComment(comment.getId(), inputCommentDto.getText(), user, event);
-        log.info("Получен приватный запрос на изменения комментария к commentId: {}, eventId: {}", commentId, event.getId());
+        log.info("Приватно изменен комментарий с commentId: {}, eventId: {}", commentId, event.getId());
         return CommentsMapper.commentToCommentDto(commentsRepository.save(newComment));
     }
 
@@ -93,7 +93,7 @@ public class CommentsPrivateServiceImp implements CommentsPrivateService {
         User user = userRepository.get(userId);
         Comment comment = commentsRepository.get(commentId);
         checkCommentOnOwner(comment, user);
-        log.info("Получен приватный запрос на удаления комментария к commentId: {}, userId: {}", commentId, userId);
+        log.info("Приватно удален комментарий с commentId: {}, userId: {}", commentId, userId);
         commentsRepository.delete(comment);
     }
 

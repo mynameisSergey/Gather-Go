@@ -36,7 +36,7 @@ public class CommentsPublicServiceImp implements CommentsPublicService {
         Event event = eventRepository.get(id);
         Pageable pageable = PageRequest.of(from, size);
         List<Comment> comments = commentsRepository.findByEventAndStateIsNot(event, CommentState.CANCELED, pageable);
-        log.info("Получен публичный запрос на список всех комментариев по событию с id: {}, from: {}, size {}", id, from, size);
+        log.info("Выполнен публичный поиск списка комментариев по событию с id: {}, from: {}, size {}", id, from, size);
         return comments.stream().map(CommentsMapper::commentToCommentDto).collect(Collectors.toList());
     }
 }
