@@ -32,7 +32,7 @@ public class CommentsPrivateController {
     @GetMapping("/{commentId}/user/{userId}")
     public CommentDto get(@PathVariable Long commentId,
                           @PathVariable Long userId) {
-        return commentsPrivateService.get(commentId, userId);
+        return commentsPrivateService.getCommentDtoByCommentId(commentId, userId);
     }
 
     /**

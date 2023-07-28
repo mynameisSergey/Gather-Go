@@ -38,7 +38,7 @@ public class CommentsPrivateServiceImp implements CommentsPrivateService {
     private final CommentsRepository commentsRepository;
 
     @Override
-    public CommentDto get(Long commentId, Long userId) {
+    public CommentDto getCommentDtoByCommentId(Long commentId, Long userId) {
         Comment comment = commentsRepository.get(commentId);
         User user = userRepository.get(userId);
         checkCommentOnOwner(comment, user);

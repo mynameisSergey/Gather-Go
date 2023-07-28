@@ -17,7 +17,7 @@ public interface CommentsPrivateService {
      * @param userId    ID пользователя
      * @return Объект CommentDto
      */
-    CommentDto get(Long commentId, Long userId);
+    CommentDto getCommentDtoByCommentId(Long commentId, Long userId);
 
     /**
      * Метод получения списка комментариев по ID события и ID пользователя
