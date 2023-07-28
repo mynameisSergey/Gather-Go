@@ -77,7 +77,7 @@ public class CommentsPrivateServiceImp implements CommentsPrivateService {
         }
         Event event = eventRepository.get(inputCommentDto.getEventId());
         User user = userRepository.get(inputCommentDto.getUserId());
-        if (!(comment.getEvent().getId() == event.getId())) {
+        if (!comment.getEvent().getId().equals(event.getId())) {
             throw new ForbiddenEventException("Комментарий с id: " + comment.getId()
                     + " не принадлежит событию с id: " + event.getId());
         }
