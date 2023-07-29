@@ -13,6 +13,6 @@ import java.util.List;
 @Value
 @Builder
 public class EventRequestStatusUpdateRequest {
-    List<Long> requestIds;
-    RequestStatus status;
+    private List<Long> requestIds;
+    private RequestStatus status;
 }

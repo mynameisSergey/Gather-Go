@@ -8,13 +8,13 @@ import java.util.List;
 
 /**
  * Модель объекта UpdateCompilationRequest
- * (Данные о подборке событий)
+ * (Изменение информации о подборке событий)
  */
-@Builder
 @Value
+@Builder
 public class UpdateCompilationRequest {
-    List<Long> events;
-    Boolean pinned;
+    private List<Long> events;
+    private Boolean pinned;
     @Size(max = 50, message = "Максимальное кол-во символов для описания: 50")
-    String title;
+    private String title;
 }

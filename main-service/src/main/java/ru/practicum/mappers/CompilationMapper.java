@@ -39,7 +39,7 @@ public class CompilationMapper {
         return CompilationDto.builder()
                 .id(compilation.getId())
                 .events(compilation.getEvents()
-                        .stream().map(EventMapper::eventToeventShortDto).collect(Collectors.toList()))
+                        .stream().map(EventMapper::eventToEventShortDto).collect(Collectors.toList()))
                 .pinned(compilation.isPinned())
                 .title(compilation.getTitle())
                 .build();

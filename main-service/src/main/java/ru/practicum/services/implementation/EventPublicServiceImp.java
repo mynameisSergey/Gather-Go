@@ -31,6 +31,7 @@ import java.util.stream.Collectors;
 @Slf4j
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class EventPublicServiceImp implements EventPublicService {
     public static final String DATE_TIME_FORMAT = "yyyy-MM-dd HH:mm:ss";
     private final EventRepository eventRepository;
@@ -38,11 +39,8 @@ public class EventPublicServiceImp implements EventPublicService {
     private final StatsClient statsClient;
     @Value("${app.name}")
     private String appName;
-    //private String appName = "main-service";
-
 
     @Override
-    @Transactional(readOnly = true)
     public List<EventShortDto> get(String text, List<Long> categories, Boolean paid, String rangeStart,
                                    String rangeEnd, boolean onlyAvailable, String sort,
                                    Integer from, Integer size, HttpServletRequest request) {
@@ -65,13 +63,12 @@ public class EventPublicServiceImp implements EventPublicService {
         log.info("Получен публичный запрос на получение всех событий");
         if (!onlyAvailable) {
             return newEvents.stream().filter(e -> e.getParticipantLimit() >= e.getConfirmedRequests())
-                    .map(EventMapper::eventToeventShortDto).collect(Collectors.toList());
+                    .map(EventMapper::eventToEventShortDto).collect(Collectors.toList());
         }
-        return newEvents.stream().map(EventMapper::eventToeventShortDto).collect(Collectors.toList());
+        return newEvents.stream().map(EventMapper::eventToEventShortDto).collect(Collectors.toList());
     }
 
     @Override
-    @Transactional(readOnly = true)
     public EventFullDto getEventFullDto(Long id, HttpServletRequest request) {
         HitDto hitDto = HitDto.builder()
                 .app(appName)

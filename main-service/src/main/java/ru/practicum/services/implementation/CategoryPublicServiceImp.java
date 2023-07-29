@@ -9,7 +9,6 @@ import ru.practicum.mappers.CategoryMapper;
 import ru.practicum.models.Category;
 import ru.practicum.models.dto.CategoryDto;
 import ru.practicum.repositories.CategoryRepository;
-import ru.practicum.repositories.FindObjectInRepository;
 import ru.practicum.services.CategoryPublicService;
 
 import java.util.List;
@@ -25,7 +24,6 @@ import java.util.stream.Collectors;
 public class CategoryPublicServiceImp implements CategoryPublicService {
 
     private final CategoryRepository categoryRepository;
-    private final FindObjectInRepository findObjectInRepository;
 
     @Override
     public List<CategoryDto> get(int from, int size) {
@@ -36,7 +34,7 @@ public class CategoryPublicServiceImp implements CategoryPublicService {
 
     @Override
     public CategoryDto get(Long id) {
-        Category category = findObjectInRepository.getCategoryById(id);
+        Category category = categoryRepository.get(id);
         log.info("Получен запрос на поиск категории по id: {}", id);
         return CategoryMapper.categoryToCategoryDto(category);
     }

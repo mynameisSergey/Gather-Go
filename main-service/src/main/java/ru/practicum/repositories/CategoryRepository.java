@@ -1,6 +1,7 @@
 package ru.practicum.repositories;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import ru.practicum.exceptions.ResourceNotFoundException;
 import ru.practicum.models.Category;
 
 /**
@@ -8,4 +9,9 @@ import ru.practicum.models.Category;
  */
 public interface CategoryRepository extends JpaRepository<Category, Long> {
     Boolean existsByName(String name);
+
+    default Category get(long id) {
+        return findById(id).orElseThrow(()
+                -> new ResourceNotFoundException("Категория c id:  " + id + " не существует"));
+    }
 }

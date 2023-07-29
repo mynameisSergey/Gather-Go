@@ -9,7 +9,6 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.mappers.CompilationMapper;
 import ru.practicum.models.dto.CompilationDto;
 import ru.practicum.repositories.CompilationRepository;
-import ru.practicum.repositories.FindObjectInRepository;
 import ru.practicum.services.CompilationPublicService;
 
 import java.util.List;
@@ -25,7 +24,6 @@ import java.util.stream.Collectors;
 public class CompilationPublicServiceImp implements CompilationPublicService {
 
     private final CompilationRepository compilationRepository;
-    private final FindObjectInRepository findObjectInRepository;
 
     @Override
     public List<CompilationDto> get(Boolean pinned, int from, int size) {
@@ -38,6 +36,6 @@ public class CompilationPublicServiceImp implements CompilationPublicService {
     @Override
     public CompilationDto get(Long id) {
         log.info("Получен запрос на поиск подборки событий по id: {}", id);
-        return CompilationMapper.compilationToCompilationDto(findObjectInRepository.getCompilationById(id));
+        return CompilationMapper.compilationToCompilationDto(compilationRepository.get(id));
     }
 }

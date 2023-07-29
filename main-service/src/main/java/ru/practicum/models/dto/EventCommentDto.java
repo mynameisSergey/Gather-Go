@@ -7,19 +7,17 @@ import lombok.Value;
 import java.time.LocalDateTime;
 
 /**
- * Модель объекта EventShort Data Transfer Object
+ * Модель объекта EventComment Data Transfer Object
+ * (Комментарий к событию)
  */
 @Value
 @Builder
-public class EventShortDto {
+public class EventCommentDto {
     private String annotation;
     private CategoryDto category;
-    private Long confirmedRequests;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime eventDate;
     private Long id;
     private UserShortDto initiator;
-    private boolean paid;
     private String title;
-    private Long views;
 }

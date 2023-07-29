@@ -167,9 +167,9 @@ public class ErrorHandlerMain {
         return apiError;
     }
 
-    @ExceptionHandler(Throwable.class)
+    @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public ApiError handleAllExceptions(Throwable ex) {
+    public ApiError handleAllExceptions(Exception ex) {
         ApiError apiError = ApiError.builder()
                 .errors(Collections.singletonList(ex.getMessage()))
                 .message("Unexpected error occurred")

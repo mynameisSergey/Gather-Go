@@ -17,8 +17,8 @@ import ru.practicum.models.dto.EventFullDto;
 import ru.practicum.models.dto.UpdateEventAdminRequest;
 import ru.practicum.models.enums.ActionState;
 import ru.practicum.models.enums.EventState;
+import ru.practicum.repositories.CategoryRepository;
 import ru.practicum.repositories.EventRepository;
-import ru.practicum.repositories.FindObjectInRepository;
 import ru.practicum.services.EventAdminService;
 import ru.practicum.util.DateFormatter;
 
@@ -34,15 +34,14 @@ import java.util.stream.Collectors;
 @Slf4j
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class EventAdminServiceImp implements EventAdminService {
 
     private final EventRepository eventRepository;
-    private final FindObjectInRepository findObjectInRepository;
     private final ProcessingEvents processingEvents;
-
+    private final CategoryRepository categoryRepository;
 
     @Override
-    @Transactional(readOnly = true)
     public List<EventFullDto> get(List<Long> users, List<String> states, List<Long> categories,
                                   String rangeStart, String rangeEnd, int from, int size, HttpServletRequest request) {
         PageRequest page = PageRequest.of(from, size);
@@ -72,7 +71,7 @@ public class EventAdminServiceImp implements EventAdminService {
     @Override
     @Transactional
     public EventFullDto update(Long eventId, UpdateEventAdminRequest updateEvent, HttpServletRequest request) {
-        Event event = findObjectInRepository.getEventById(eventId);
+        Event event = eventRepository.get(eventId);
         eventAvailability(event);
         if (updateEvent.getEventDate() != null) {
             checkEventDate(DateFormatter.formatDate(updateEvent.getEventDate()));
@@ -81,7 +80,7 @@ public class EventAdminServiceImp implements EventAdminService {
             event.setAnnotation(updateEvent.getAnnotation());
         }
         if (updateEvent.getCategory() != null) {
-            Category category = findObjectInRepository.getCategoryById(updateEvent.getCategory());
+            Category category = categoryRepository.get(updateEvent.getCategory());
             event.setCategory(category);
         }
         if (updateEvent.getDescription() != null && !updateEvent.getDescription().isBlank()) {

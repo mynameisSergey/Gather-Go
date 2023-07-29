@@ -8,11 +8,14 @@ import ru.practicum.exceptions.ConflictDeleteException;
 import ru.practicum.exceptions.ConflictNameCategoryException;
 import ru.practicum.mappers.CategoryMapper;
 import ru.practicum.models.Category;
+import ru.practicum.models.Event;
 import ru.practicum.models.dto.CategoryDto;
 import ru.practicum.models.dto.NewCategoryDto;
 import ru.practicum.repositories.CategoryRepository;
-import ru.practicum.repositories.FindObjectInRepository;
+import ru.practicum.repositories.EventRepository;
 import ru.practicum.services.CategoryAdminService;
+
+import java.util.List;
 
 /**
  * Класс CategoryAdminServiceImp для отработки логики запросов и логирования
@@ -23,7 +26,7 @@ import ru.practicum.services.CategoryAdminService;
 public class CategoryAdminServiceImp implements CategoryAdminService {
 
     private final CategoryRepository categoryRepository;
-    private final FindObjectInRepository findObjectInRepository;
+    private final EventRepository eventRepository;
 
     @Override
     @Transactional
@@ -32,12 +35,13 @@ public class CategoryAdminServiceImp implements CategoryAdminService {
         log.info("Получен запрос на добавление категории с названием: {}", newCategoryDto.getName());
         checkNameCategory(category.getName());
         return CategoryMapper.categoryToCategoryDto(categoryRepository.save(category));
+
     }
 
     @Override
     @Transactional
     public CategoryDto update(Long id, CategoryDto categoryDto) {
-        Category category = findObjectInRepository.getCategoryById(id);
+        Category category = categoryRepository.get(id);
         if (!categoryDto.getName().equals(category.getName())) {
             checkNameCategory(categoryDto.getName());
             category.setName(categoryDto.getName());
@@ -49,8 +53,8 @@ public class CategoryAdminServiceImp implements CategoryAdminService {
     @Override
     @Transactional
     public void delete(Long id) {
-        Category category = findObjectInRepository.getCategoryById(id);
-        if (findObjectInRepository.isRelatedEvent(category)) {
+        Category category = categoryRepository.get(id);
+        if (isRelatedEvent(category)) {
             throw new ConflictDeleteException("Существуют события, связанные с категорией " + category.getName());
         }
         log.info("Получен запрос на удаление категории c id: {}", id);
@@ -59,11 +63,23 @@ public class CategoryAdminServiceImp implements CategoryAdminService {
 
     /**
      * Метод проверки категории на дубликат
+     *
      * @param name Название категории
      */
     private void checkNameCategory(String name) {
         if (categoryRepository.existsByName(name)) {
             throw new ConflictNameCategoryException("Имя категории " + name + " уже есть в базе");
         }
+    }
+
+    /**
+     * Метод проверки Категории в базе по объекту
+     *
+     * @param category Искомый объект категории
+     * @return Найдена или нет искомая категория (true/false)
+     */
+    private boolean isRelatedEvent(Category category) {
+        List<Event> findEventByCategory = eventRepository.findEventByCategoryIs(category);
+        return !findEventByCategory.isEmpty();
     }
 }

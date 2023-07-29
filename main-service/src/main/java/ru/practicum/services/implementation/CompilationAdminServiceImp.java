@@ -12,7 +12,6 @@ import ru.practicum.models.dto.NewCompilationDto;
 import ru.practicum.models.dto.UpdateCompilationRequest;
 import ru.practicum.repositories.CompilationRepository;
 import ru.practicum.repositories.EventRepository;
-import ru.practicum.repositories.FindObjectInRepository;
 import ru.practicum.services.CompilationAdminService;
 
 import java.util.HashSet;
@@ -28,7 +27,6 @@ import java.util.Set;
 public class CompilationAdminServiceImp implements CompilationAdminService {
 
     private final CompilationRepository compilationRepository;
-    private final FindObjectInRepository findObjectInRepository;
     private final EventRepository eventRepository;
 
     @Override
@@ -46,7 +44,7 @@ public class CompilationAdminServiceImp implements CompilationAdminService {
     @Override
     @Transactional
     public CompilationDto update(Long compId, UpdateCompilationRequest updateCompilationRequest) {
-        Compilation newCompilation = findObjectInRepository.getCompilationById(compId);
+        Compilation newCompilation = compilationRepository.get(compId);
         Set<Event> events;
         if (updateCompilationRequest.getEvents() != null) {
             events = addEvents(updateCompilationRequest.getEvents());
@@ -65,7 +63,7 @@ public class CompilationAdminServiceImp implements CompilationAdminService {
     @Override
     @Transactional
     public void delete(Long compId) {
-        findObjectInRepository.getCompilationById(compId);
+        compilationRepository.existsById(compId);
         log.info("Получен запрос на удаление подборки событий по id: {}", compId);
         compilationRepository.deleteById(compId);
     }

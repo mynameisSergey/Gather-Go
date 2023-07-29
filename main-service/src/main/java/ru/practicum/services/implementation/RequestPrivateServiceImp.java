@@ -15,8 +15,8 @@ import ru.practicum.models.dto.ParticipationRequestDto;
 import ru.practicum.models.enums.EventState;
 import ru.practicum.models.enums.RequestStatus;
 import ru.practicum.repositories.EventRepository;
-import ru.practicum.repositories.FindObjectInRepository;
 import ru.practicum.repositories.RequestRepository;
+import ru.practicum.repositories.UserRepository;
 import ru.practicum.services.RequestPrivateService;
 
 import javax.servlet.http.HttpServletRequest;
@@ -32,17 +32,17 @@ import java.util.stream.Collectors;
 @Slf4j
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class RequestPrivateServiceImp implements RequestPrivateService {
 
     private final RequestRepository requestRepository;
-    private final FindObjectInRepository findObjectInRepository;
     private final EventRepository eventRepository;
     private final ProcessingEvents processingEvents;
+    private final UserRepository userRepository;
 
     @Override
-    @Transactional(readOnly = true)
     public List<ParticipationRequestDto> get(Long id) {
-        User user = findObjectInRepository.getUserById(id);
+        User user = userRepository.get(id);
         List<Request> requests = requestRepository.findAllByRequesterIs(user);
         log.info("Получен запрос на получение всех запросов пользователя с id:" + id);
         return requests.stream().map(RequestMapper::requestToParticipationRequestDto)
@@ -52,8 +52,8 @@ public class RequestPrivateServiceImp implements RequestPrivateService {
     @Override
     @Transactional
     public ParticipationRequestDto create(Long userId, Long eventId, HttpServletRequest httpServletRequest) {
-        User user = findObjectInRepository.getUserById(userId);
-        Event event = findObjectInRepository.getEventById(eventId);
+        User user = userRepository.get(userId);
+        Event event = eventRepository.get(eventId);
         if (event.getState().equals(EventState.PUBLISHED)) {
             addEventConfirmRequestAndSetViews(event, httpServletRequest);
         } else {
@@ -94,8 +94,8 @@ public class RequestPrivateServiceImp implements RequestPrivateService {
     @Override
     @Transactional
     public ParticipationRequestDto update(Long userId, Long requestId, HttpServletRequest httpServletRequest) {
-        User user = findObjectInRepository.getUserById(userId);
-        Request request = findObjectInRepository.getRequestById(requestId);
+        User user = userRepository.get(userId);
+        Request request = requestRepository.get(requestId);
         if (!request.getRequester().equals(user)) {
             throw new ConflictRequestException("Пользователь с id: " + userId
                     + "не подавал заявку с id: " + request.getId());
