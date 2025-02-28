@@ -89,4 +89,5 @@ public class CommentsPrivateController {
                        @PathVariable Long userId) {
         commentsPrivateService.deleteCommentDtoByCommentId(commentId, userId);
     }
+
 }

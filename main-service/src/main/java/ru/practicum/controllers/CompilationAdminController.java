@@ -9,7 +9,6 @@ import ru.practicum.models.dto.NewCompilationDto;
 import ru.practicum.models.dto.UpdateCompilationRequest;
 import ru.practicum.services.CompilationAdminService;
 
-
 /**
  * Класс CompilationAdminController по энпоинту admin/compilations
  */

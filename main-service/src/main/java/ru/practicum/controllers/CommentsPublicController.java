@@ -33,4 +33,5 @@ public class CommentsPublicController {
                                 @Positive @RequestParam(defaultValue = "10") Integer size) {
         return commentsPublicService.get(eventId, from, size);
     }
+
 }

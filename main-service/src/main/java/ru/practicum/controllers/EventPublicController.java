@@ -62,4 +62,5 @@ public class EventPublicController {
     EventFullDto get(@PathVariable Long id, HttpServletRequest request) {
         return eventPublicService.getEventFullDto(id, request);
     }
+
 }

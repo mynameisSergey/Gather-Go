@@ -84,4 +84,5 @@ public class CommentsAdminController {
     public void delete(@PathVariable Long commentId) {
         commentsAdminService.deleteByCommentId(commentId);
     }
+
 }

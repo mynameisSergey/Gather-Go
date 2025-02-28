@@ -23,7 +23,6 @@ public class RequestPrivateController {
 
     private final RequestPrivateService requestPrivateService;
 
-
     /**
      * Метод (эндпоинт) получения информации о заявках текущего пользователя на участие в чужих событиях
      *
@@ -63,4 +62,5 @@ public class RequestPrivateController {
                                    HttpServletRequest request) {
         return requestPrivateService.update(userId, requestId, request);
     }
+
 }

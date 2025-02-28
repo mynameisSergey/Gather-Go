@@ -63,4 +63,5 @@ public class EventAdminController {
                         HttpServletRequest request) {
         return eventAdminService.update(eventId, updateEventAdminRequest, request);
     }
+
 }

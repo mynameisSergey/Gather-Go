@@ -60,4 +60,5 @@ public class UserAdminController {
     void delete(@PathVariable Long userId) {
         userAdminService.delete(userId);
     }
+
 }

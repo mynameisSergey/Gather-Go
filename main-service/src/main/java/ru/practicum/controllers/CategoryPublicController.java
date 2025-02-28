@@ -44,4 +44,5 @@ public class CategoryPublicController {
     public CategoryDto get(@PathVariable Long catId) {
         return categoryPublicService.get(catId);
     }
+
 }

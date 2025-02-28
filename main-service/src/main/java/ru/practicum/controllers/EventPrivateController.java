@@ -112,4 +112,5 @@ public class EventPrivateController {
                                                 HttpServletRequest request) {
         return eventPrivateService.updateStatus(userId, eventId, eventRequest, request);
     }
+
 }
