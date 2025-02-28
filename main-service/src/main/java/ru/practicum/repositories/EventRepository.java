@@ -20,12 +20,43 @@ import java.util.Set;
  */
 @Repository
 public interface EventRepository extends JpaRepository<Event, Long> {
+    /**
+     * Находит события по категории.
+     *
+     * @param category категория события
+     * @return список событий
+     */
     List<Event> findEventByCategoryIs(Category category);
 
+    /**
+     * Находит события по их идентификаторам.
+     *
+     * @param id идентификаторы событий
+     * @return множество событий
+     */
     Set<Event> findAllByIdIsIn(List<Long> id);
 
+    /**
+     * Находит все события по идентификатору инициатора.
+     *
+     * @param userId   идентификатор инициатора
+     * @param pageable параметры пагинации
+     * @return список событий
+     */
     List<Event> findAllByInitiatorId(Long userId, Pageable pageable);
 
+    /**
+     * Находит все события для администраторов с учетом различных фильтров.
+     *
+     * @param users      список идентификаторов пользователей
+     * @param states     список состояний событий
+     * @param categories список категорий событий
+     * @param rangeStart начало диапазона дат
+     * @param rangeEnd   конец диапазона дат
+     * @param from       смещение для пагинации
+     * @param size       размер страницы
+     * @return список событий
+     */
     @Query(value = "SELECT * FROM events WHERE (initiator_id IN :users OR :users IS NULL) AND state IN :states " +
             "AND (category_id IN :categories  OR :categories IS NULL) AND (event_date >= to_timestamp(:rangeStart, 'yyyy-mm-dd hh24:mi:ss')  " +
             "OR to_timestamp(:rangeStart, 'yyyy-mm-dd hh24:mi:ss') IS NULL) AND (event_date <= to_timestamp(:rangeEnd, 'yyyy-mm-dd hh24:mi:ss')   " +
@@ -38,6 +69,17 @@ public interface EventRepository extends JpaRepository<Event, Long> {
                                @Param("from") Integer from,
                                @Param("size") Integer size);
 
+    /**
+     * Находит все события для администраторов с учетом фильтров и пагинации.
+     *
+     * @param users      список идентификаторов пользователей
+     * @param states     список состояний событий
+     * @param categories список категорий событий
+     * @param rangeStart начало диапазона дат
+     * @param rangeEnd   конец диапазона дат
+     * @param pageable   параметры пагинации
+     * @return список событий
+     */
     @Query("select e from Event e " +
             "where (:users is null or e.initiator.id in :users) " +
             "and (:states is null or e.state in :states) " +
@@ -51,6 +93,19 @@ public interface EventRepository extends JpaRepository<Event, Long> {
                                        @Param("rangeEnd") LocalDateTime rangeEnd,
                                        Pageable pageable);
 
+    /**
+     * Находит события для публичного доступа с учетом фильтров.
+     *
+     * @param text       текст для поиска в аннотации или описании
+     * @param categories категории событий
+     * @param paid       статус оплаты
+     * @param rangeStart начало диапазона дат
+     * @param rangeEnd   конец диапазона дат
+     * @param sort       критерий сортировки
+     * @param from       смещение для пагинации
+     * @param size       размер страницы
+     * @return список событий
+     */
     @Query(value = "SELECT * " +
             "FROM events  " +
             "WHERE (lower(annotation) LIKE '%'||lower(:text)||'%' OR lower(description) LIKE '%'||lower(:text)||'%') " +
@@ -71,6 +126,13 @@ public interface EventRepository extends JpaRepository<Event, Long> {
                                 @Param("from") Integer from,
                                 @Param("size") Integer size);
 
+    /**
+     * Находит событие по его идентификатору и состоянию.
+     *
+     * @param id    идентификатор события
+     * @param state состояние события
+     * @return событие, если найдено
+     */
     Optional<Event> findEventByIdAndStateIs(Long id, EventState state);
 
     default Event get(long id) {
