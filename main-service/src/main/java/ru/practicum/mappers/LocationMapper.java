@@ -17,6 +17,9 @@ public class LocationMapper {
      * @return Преобразованный объект Location
      */
     public Location locationDtoToLocation(LocationDto locationDto) {
+        if (locationDto == null)
+            throw new IllegalArgumentException("LocationDto cannot be null");
+
         return Location.builder()
                 .lat(locationDto.getLat())
                 .lon(locationDto.getLon())
@@ -30,6 +33,9 @@ public class LocationMapper {
      * @return Преобразованный объект LocationDto
      */
     public LocationDto locationToLocationDto(Location location) {
+        if (location == null)
+            throw new IllegalArgumentException("Location cannot be null");
+
         return LocationDto.builder()
                 .lat(location.getLat())
                 .lon(location.getLon())

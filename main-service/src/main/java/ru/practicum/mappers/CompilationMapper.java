@@ -22,6 +22,9 @@ public class CompilationMapper {
      * @return Преобразованный объект Compilation
      */
     public Compilation newCompilationDtoToCompilationAndEvents(NewCompilationDto newCompilationDto, Set<Event> events) {
+        if (newCompilationDto == null || events == null)
+            throw new IllegalArgumentException("NewCompilationDto and events cannot be null");
+
         return Compilation.builder()
                 .events(events)
                 .pinned(newCompilationDto.isPinned())
@@ -36,6 +39,9 @@ public class CompilationMapper {
      * @return Преобразованный объект CompilationDto
      */
     public CompilationDto compilationToCompilationDto(Compilation compilation) {
+        if (compilation == null)
+            throw new IllegalArgumentException("Compilation cannot be null");
+
         return CompilationDto.builder()
                 .id(compilation.getId())
                 .events(compilation.getEvents()

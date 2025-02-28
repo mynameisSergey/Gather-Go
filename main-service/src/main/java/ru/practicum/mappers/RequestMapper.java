@@ -18,6 +18,9 @@ public class RequestMapper {
      * @return Преобразованный объект ParticipationRequestDto
      */
     public ParticipationRequestDto requestToParticipationRequestDto(Request request) {
+        if (request == null)
+            throw new IllegalArgumentException("Request cannot be null");
+
         return ParticipationRequestDto.builder()
                 .created(request.getCreated())
                 .event(request.getEvent().getId())

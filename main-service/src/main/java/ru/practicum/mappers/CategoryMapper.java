@@ -18,6 +18,9 @@ public class CategoryMapper {
      * @return Преобразованный объект Category
      */
     public Category categoryDtoToCategory(CategoryDto categoryDto) {
+        if (categoryDto == null)
+            return null; // или выбросьте исключение
+
         return Category.builder()
                 .id(categoryDto.getId())
                 .name(categoryDto.getName())
@@ -31,6 +34,9 @@ public class CategoryMapper {
      * @return Преобразованный объект CategoryDto
      */
     public CategoryDto categoryToCategoryDto(Category category) {
+        if (category == null)
+            return null; // или выбросьте исключение
+
         return CategoryDto.builder()
                 .id(category.getId())
                 .name(category.getName())
@@ -44,6 +50,9 @@ public class CategoryMapper {
      * @return Преобразованный объект Category
      */
     public Category newCategoryDtoToCategory(NewCategoryDto newCategoryDto) {
+        if (newCategoryDto == null)
+            return null; // или выбросьте исключение
+
         return Category.builder()
                 .name(newCategoryDto.getName())
                 .build();

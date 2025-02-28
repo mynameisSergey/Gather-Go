@@ -19,6 +19,9 @@ public class UserMapper {
      * @return Преобразованный объект UserDto
      */
     public UserDto userToDto(User user) {
+        if (user == null)
+            throw new IllegalArgumentException("User cannot be null");
+
         return UserDto.builder()
                 .id(user.getId())
                 .email(user.getEmail())
@@ -33,6 +36,9 @@ public class UserMapper {
      * @return Преобразованный объект UserShortDto
      */
     public UserShortDto userToUserShortDto(User user) {
+        if (user == null)
+            throw new IllegalArgumentException("User cannot be null");
+
         return UserShortDto.builder()
                 .id(user.getId())
                 .name(user.getName())
@@ -46,6 +52,9 @@ public class UserMapper {
      * @return Преобразованный объект User
      */
     public User newUserRequestToUser(NewUserRequest newUserRequest) {
+        if (newUserRequest == null)
+            throw new IllegalArgumentException("NewUserRequest cannot be null");
+
         return User.builder()
                 .name(newUserRequest.getName())
                 .email(newUserRequest.getEmail())

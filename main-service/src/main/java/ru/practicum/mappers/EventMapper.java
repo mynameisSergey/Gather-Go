@@ -27,6 +27,9 @@ public class EventMapper {
      * @return Преобразованный объект EventShortDto
      */
     public EventShortDto eventToEventShortDto(Event event) {
+        if (event == null)
+            throw new IllegalArgumentException("Event cannot be null");
+
         return EventShortDto.builder()
                 .annotation(event.getAnnotation())
                 .category(CategoryMapper.categoryToCategoryDto(event.getCategory()))
@@ -47,6 +50,9 @@ public class EventMapper {
      * @return Преобразованный объект EventFullDto
      */
     public EventFullDto eventToEventFullDto(Event event) {
+        if (event == null)
+            throw new IllegalArgumentException("Event cannot be null");
+
         return EventFullDto.builder()
                 .annotation(event.getAnnotation())
                 .category(CategoryMapper.categoryToCategoryDto(event.getCategory()))
@@ -79,6 +85,9 @@ public class EventMapper {
      */
     public Event newEventDtoToCreateEvent(NewEventDto newEventDto, User user, Category category, Long views,
                                           Long confirmedRequests) {
+        if (newEventDto == null || user == null || category == null)
+            throw new IllegalArgumentException("NewEventDto, User, and Category cannot be null");
+
         LocalDateTime dateTime = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
         return Event.builder()
                 .annotation(newEventDto.getAnnotation())
@@ -100,6 +109,9 @@ public class EventMapper {
     }
 
     public EventCommentDto eventToEventCommentDto(Event event) {
+        if (event == null)
+            throw new IllegalArgumentException("Event cannot be null");
+
         return EventCommentDto.builder()
                 .annotation(event.getAnnotation())
                 .category(CategoryMapper.categoryToCategoryDto(event.getCategory()))

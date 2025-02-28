@@ -28,6 +28,9 @@ public class CommentsMapper {
      * @return Преобразованный объект Comment
      */
     public Comment createComment(InputCommentDto inputCommentDto, User user, Event event) {
+        if (inputCommentDto == null || user == null || event == null)
+            throw new BadRequestException("Input parameters cannot be null");
+
         return Comment.builder()
                 .text(inputCommentDto.getText())
                 .createdOn(LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS))
@@ -44,6 +47,9 @@ public class CommentsMapper {
      * @return Преобразованный CommentDto
      */
     public CommentDto commentToCommentDto(Comment comment) {
+        if (comment == null)
+            throw new BadRequestException("Comment cannot be null");
+
         return CommentDto.builder()
                 .id(comment.getId())
                 .text(comment.getText())
@@ -65,6 +71,9 @@ public class CommentsMapper {
      * @return Преобразованный Comment
      */
     public Comment updateComment(Long commentId, String text, User user, Event event) {
+        if (commentId == null || text == null || user == null || event == null)
+            throw new BadRequestException("Input parameters cannot be null");
+
         return Comment.builder()
                 .id(commentId)
                 .text(text)
@@ -82,6 +91,9 @@ public class CommentsMapper {
      * @return Статус комментария
      */
     public CommentState toCommentState(CommentStateDto commentStateDto) {
+        if (commentStateDto == null)
+            throw new BadRequestException("CommentStateDto cannot be null");
+
         if (commentStateDto.name().equals(CommentState.UPDATE.name())) {
             return CommentState.UPDATE;
         }
