@@ -3,6 +3,8 @@ package ru.practicum.models.dto;
 import lombok.Builder;
 import lombok.Value;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
 import java.util.List;
 
 /**
@@ -12,8 +14,10 @@ import java.util.List;
 @Value
 @Builder
 public class CompilationDto {
-    private List<EventShortDto> events;
-    private Long id;
-    private boolean pinned;
-    private String title;
+    @NotEmpty(message = "Список событий не должен быть пустым")
+    List<EventShortDto> events;
+    Long id;
+    boolean pinned;
+    @NotBlank(message = "Название подборки не должно быть пустым")
+    String title;
 }

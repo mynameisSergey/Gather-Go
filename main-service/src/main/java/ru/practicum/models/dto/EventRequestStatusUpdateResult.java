@@ -9,10 +9,7 @@ import java.util.List;
  * (Результат подтверждения/отклонения заявок на участие в событии)
  */
 @Builder
-@Setter
-@Getter
-@AllArgsConstructor
-@NoArgsConstructor
+@Data
 public class EventRequestStatusUpdateResult {
     private List<ParticipationRequestDto> confirmedRequests;
     private List<ParticipationRequestDto> rejectedRequests;

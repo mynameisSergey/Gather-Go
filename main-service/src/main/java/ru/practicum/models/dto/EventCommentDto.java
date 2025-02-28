@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Builder;
 import lombok.Value;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 /**
@@ -13,11 +15,15 @@ import java.time.LocalDateTime;
 @Value
 @Builder
 public class EventCommentDto {
-    private String annotation;
-    private CategoryDto category;
+    @NotBlank(message = "Аннотация не должна быть пустой")
+    String annotation;
+    @NotNull(message = "Категория не должна быть null")
+    CategoryDto category;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime eventDate;
-    private Long id;
-    private UserShortDto initiator;
-    private String title;
+    @NotNull(message = "Дата события не должна быть null")
+    LocalDateTime eventDate;
+    Long id;
+    UserShortDto initiator;
+    @NotBlank(message = "Название не должно быть пустым")
+    String title;
 }

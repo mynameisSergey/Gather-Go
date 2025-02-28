@@ -4,6 +4,8 @@ import lombok.Builder;
 import lombok.Value;
 import ru.practicum.models.enums.RequestStatus;
 
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 /**
@@ -13,6 +15,8 @@ import java.util.List;
 @Value
 @Builder
 public class EventRequestStatusUpdateRequest {
-    private List<Long> requestIds;
-    private RequestStatus status;
+    @NotEmpty(message = "Список идентификаторов запросов не должен быть пустым")
+    List<Long> requestIds;
+    @NotNull(message = "Статус не должен быть null")
+    RequestStatus status;
 }

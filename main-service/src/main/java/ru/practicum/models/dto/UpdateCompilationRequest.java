@@ -3,6 +3,7 @@ package ru.practicum.models.dto;
 import lombok.Builder;
 import lombok.Value;
 
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 import java.util.List;
 
@@ -13,8 +14,9 @@ import java.util.List;
 @Value
 @Builder
 public class UpdateCompilationRequest {
-    private List<Long> events;
-    private Boolean pinned;
+    @NotEmpty(message = "Список событий не должен быть пустым")
+    List<Long> events;
+    Boolean pinned;
     @Size(max = 50, message = "Максимальное кол-во символов для описания: 50")
-    private String title;
+    String title;
 }

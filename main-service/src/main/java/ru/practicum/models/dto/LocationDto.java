@@ -10,6 +10,6 @@ import lombok.Value;
 @Value
 @Builder
 public class LocationDto {
-    private float lat;
-    private float lon;
+    float lat;
+    float lon;
 }
