@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.exceptions.BadRequestException;
 import ru.practicum.exceptions.ConflictNameAndEmailException;
+import ru.practicum.exceptions.model.NotFoundException;
 import ru.practicum.mappers.UserMapper;
 import ru.practicum.models.User;
 import ru.practicum.models.dto.NewUserRequest;
@@ -32,8 +33,12 @@ public class UserAdminServiceImp implements UserAdminService {
     @Override
     @Transactional(readOnly = true)
     public List<UserDto> get(List<Long> ids, int from, int size) {
-        Pageable pageable = PageRequest.of(from, size);
-        if (ids == null) {
+        if (from < 0 || size <= 0) {
+            throw new BadRequestException("Параметры 'from' и 'size' должны быть положительными");
+        }
+
+        Pageable pageable = PageRequest.of(from / size, size);
+        if (ids == null || ids.isEmpty()) {
             log.info("Получен запрос на получение списка пользователей без id");
             return userRepository.findAll(pageable).stream()
                     .map(UserMapper::userToDto)
@@ -63,8 +68,12 @@ public class UserAdminServiceImp implements UserAdminService {
 
     @Override
     @Transactional
-    public void delete(Long id) {
+    public void delete(Long id) throws NotFoundException {
         User user = userRepository.get(id);
+        if (user == null) {
+            log.warn("Пользователь с id: {} не найден", id);
+            throw new NotFoundException("Пользователь не найден");
+        }
         log.info("Получен запрос на удаление пользователя с id: {}", id);
         userRepository.delete(user);
     }

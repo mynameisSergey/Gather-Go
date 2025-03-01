@@ -1,6 +1,7 @@
 package ru.practicum.services;
 
 
+import ru.practicum.exceptions.model.NotFoundException;
 import ru.practicum.models.dto.NewUserRequest;
 import ru.practicum.models.dto.UserDto;
 
@@ -34,5 +35,5 @@ public interface UserAdminService {
      *
      * @param id ID пользователя
      */
-    void delete(Long id);
+    void delete(Long id) throws NotFoundException;
 }
