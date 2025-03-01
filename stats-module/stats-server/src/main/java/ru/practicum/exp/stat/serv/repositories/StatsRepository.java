@@ -13,6 +13,7 @@ import java.util.List;
  * Интерфейс StatsRepository для обработки запросов к БД
  */
 public interface StatsRepository extends JpaRepository<Hit, Long> {
+
     /**
      * Метод получения списка посещений по времени начала и конца
      *

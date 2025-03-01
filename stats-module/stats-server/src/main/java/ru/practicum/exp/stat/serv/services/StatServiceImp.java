@@ -31,23 +31,13 @@ public class StatServiceImp implements StatService {
         if (newEnd.isBefore(newStart) || newStart.isAfter(newEnd)) {
             throw new ValidationDateException("Неверно заданы даты для поиска");
         }
-        if (uris == null && !unique) {
-            log.info(LOG_TEXT, start, end);
-            return statsRepository.findByDate(newStart, newEnd);
-        }
-        if (uris == null) {
-            log.info(LOG_TEXT, " unique: {}", start, end, true);
-            return statsRepository.findByDateAndUniqueIp(newStart, newEnd);
-        }
-        if (!uris.isEmpty() && !unique) {
-            log.info(LOG_TEXT, " uris: {}", start, end, true);
-            return statsRepository.findByDateAndUris(newStart, newEnd, uris);
-        }
-        if (!uris.isEmpty()) {
-            log.info(LOG_TEXT, " unique: {}, uris: {}", start, end, true, true);
-            return statsRepository.findByDateAndUrisWithUniqueIp(newStart, newEnd, uris);
-        }
         log.info(LOG_TEXT, start, end);
-        return new ArrayList<>();
+
+        if (uris == null || uris.isEmpty()) {
+            return unique ? statsRepository.findByDateAndUniqueIp(newStart, newEnd) : statsRepository.findByDate(newStart, newEnd);
+        } else {
+            return unique ? statsRepository.findByDateAndUrisWithUniqueIp(newStart, newEnd, uris)
+                    : statsRepository.findByDateAndUris(newStart, newEnd, uris);
+        }
     }
 }

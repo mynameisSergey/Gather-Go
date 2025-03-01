@@ -8,6 +8,7 @@ import ru.practicum.exp.stat.serv.util.DateFormatter;
 /**
  * Класс HitMapper для преобразования HitDto в Hit
  */
+
 @UtilityClass
 public class HitMapper {
 

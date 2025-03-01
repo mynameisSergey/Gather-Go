@@ -22,8 +22,17 @@ public class HitServiceImp implements HitService {
     @Override
     @Transactional
     public void create(HitDto hitDto) {
+        if (hitDto == null) {
+            log.warn("HitDto is null");
+            return; // Или выбросьте исключение, если это критично
+        }
         Hit hit = HitMapper.toHit(hitDto);
         log.info("Информация о запросе {}", hitDto.getUri());
-        hitRepository.save(hit);
+        try {
+            hitRepository.save(hit);
+        } catch (Exception e) {
+            log.error("Ошибка при сохранении хита: {}", e.getMessage());
+            // Можно выбросить пользовательское исключение или обработать ошибку по-другому
+        }
     }
 }
