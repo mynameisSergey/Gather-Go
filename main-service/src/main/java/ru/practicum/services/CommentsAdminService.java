@@ -23,9 +23,9 @@ public interface CommentsAdminService {
     /**
      * Метод получения списка комментариев по ID события
      *
-     * @param id ID события
-     * @param from    Количество комментариев, которые нужно пропустить для формирования текущего набора
-     * @param size    Количество комментариев в наборе
+     * @param id   ID события
+     * @param from Количество комментариев, которые нужно пропустить для формирования текущего набора
+     * @param size Количество комментариев в наборе
      * @return Список комментариев по событию
      */
     List<CommentDto> getListCommentDtoById(Long id, Integer from, Integer size);
@@ -41,7 +41,7 @@ public interface CommentsAdminService {
     /**
      * Метод изменения комментария по ID
      *
-     * @param id     ID комментария
+     * @param id            ID комментария
      * @param updateComment Новый изменённый комментарий в виде объекта UpdateCommentAdminDto
      * @return Изменённый комментарий в виде объекта CommentDto
      */

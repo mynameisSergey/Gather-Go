@@ -22,15 +22,15 @@ public class DateFormatter {
      * @return Преобразованная дата и время в LocalDateTime
      */
     public static LocalDateTime formatDate(String date) {
-        LocalDateTime newDate;
-        if (date == null || date.isEmpty() || date.isBlank()) {
+        LocalDateTime parsedDate;
+        if (date == null || date.isBlank()) {
             throw new ValidationDateException("Дата должна быть задана");
         }
         try {
-            newDate = LocalDateTime.parse(date, formatter);
+            parsedDate = LocalDateTime.parse(date, formatter);
         } catch (DateTimeParseException e) {
             throw new ValidationDateException("Неверный формат даты");
         }
-        return newDate;
+        return parsedDate;
     }
 }
