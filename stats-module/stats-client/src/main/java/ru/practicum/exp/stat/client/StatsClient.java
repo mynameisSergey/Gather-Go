@@ -1,10 +1,9 @@
 package ru.practicum.exp.stat.client;
 
-
-
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.publisher.Mono;
 import ru.practicum.exp.stat.dto.HitDto;
 import ru.practicum.exp.stat.dto.ViewStatsDto;
 
@@ -35,6 +34,11 @@ public class StatsClient {
                 .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
                 .bodyValue(hitDto)
                 .retrieve()
+                .onStatus(status -> status.is4xxClientError() || status.is5xxServerError(),
+                        clientResponse -> {
+                            // Обработка ошибки
+                            return Mono.error(new RuntimeException("Ошибка при отправке hit: " + clientResponse.statusCode()));
+                        })
                 .toBodilessEntity()
                 .block();
     }
@@ -57,6 +61,11 @@ public class StatsClient {
                         .queryParam("unique", unique)
                         .build())
                 .retrieve()
+                .onStatus(status -> status.is4xxClientError() || status.is5xxServerError(),
+                        clientResponse -> {
+                            // Обработка ошибки
+                            return Mono.error(new RuntimeException("Ошибка при получении статистики: " + clientResponse.statusCode()));
+                        })
                 .bodyToFlux(ViewStatsDto.class)
                 .collectList()
                 .block();
