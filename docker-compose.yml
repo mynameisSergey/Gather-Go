@@ -9,9 +9,9 @@ services:
     depends_on:
       - stats-db
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://stats-db:5432/stats-db
-      - POSTGRES_USER=admin
-      - POSTGRES_PASSWORD=admin
+      - SPRING_DATASOURCE_URL: jdbc:postgresql://stats-db:5432/stats-db
+      - POSTGRES_USER: admin
+      - POSTGRES_PASSWORD: admin
 
   stats-db:
     image: postgres:15.3-alpine
@@ -19,9 +19,9 @@ services:
     ports:
       - "6541:5432"
     environment:
-      - POSTGRES_DB=stats-db
-      - POSTGRES_USER=admin
-      - POSTGRES_PASSWORD=admin
+      - POSTGRES_DB: stats-db
+      - POSTGRES_USER: admin
+      - POSTGRES_PASSWORD: admin
 
   ewm-main-service:
     build: main-service
@@ -32,11 +32,11 @@ services:
     depends_on:
       - ewm-db
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://ewm-db:5432/ewm-db
-      - POSTGRES_USER=admin
-      - POSTGRES_PASSWORD=admin
-      - EWM_STAT_SERVICE_URL=http://stats-service:9090
-      - EWM_MAIN_NAME=ewm-main-service
+      - SPRING_DATASOURCE_URL: jdbc:postgresql://ewm-db:5432/ewm-db
+      - POSTGRES_USER: admin
+      - POSTGRES_PASSWORD: admin
+      - EWM_STAT_SERVICE_URL: http://stats-service:9090
+      - EWM_MAIN_NAME: ewm-main-service
 
   ewm-db:
     image: postgres:15.3-alpine
@@ -44,6 +44,10 @@ services:
     ports:
       - "6542:5432"
     environment:
-      - POSTGRES_DB=ewm-db
-      - POSTGRES_USER=admin
-      - POSTGRES_PASSWORD=admin
+      - POSTGRES_DB: ewm-db
+      - POSTGRES_USER: admin
+      - POSTGRES_PASSWORD: admin
+
+        networks:
+          default:
+            driver: bridge
