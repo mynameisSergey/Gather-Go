@@ -18,7 +18,7 @@ public class HitController {
     private final HitService hitService;
 
     /**
-     * Метод (эндпоинт) создания запроса Hit
+     * Метод (энпоинту) создания запроса Hit
      *
      * @param hitDto Объект запроса hit
      */

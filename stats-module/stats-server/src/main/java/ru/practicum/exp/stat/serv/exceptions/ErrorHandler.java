@@ -14,11 +14,28 @@ import java.util.Map;
 @Slf4j
 @RestControllerAdvice
 public class ErrorHandler {
-
-    @ExceptionHandler
+    /**
+     * Обработчик исключений ValidationDateException
+     *
+     * @param e Исключение, которое нужно обработать
+     * @return Сообщение об ошибке в формате Map
+     */
+    @ExceptionHandler(ValidationDateException.class)
     @ResponseStatus(code = HttpStatus.BAD_REQUEST)
     public Map<String, String> handleValidationDateException(final ValidationDateException e) {
         log.warn("400 {}", e.getMessage());
-        return Map.of("400", e.getMessage());
+        return Map.of("error", e.getMessage());
+    }
+    /**
+     * Обработчик всех остальных исключений
+     *
+     * @param e Исключение, которое нужно обработать
+     * @return Сообщение об ошибке в формате Map
+     */
+    @ExceptionHandler(Exception.class)
+    @ResponseStatus(code = HttpStatus.INTERNAL_SERVER_ERROR)
+    public Map<String, String> handleGenericException(final Exception e) {
+        log.error("500 {}", e.getMessage(), e);
+        return Map.of("error", "Произошла ошибка на сервере: " + e.getMessage());
     }
 }
