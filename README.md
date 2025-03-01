@@ -26,8 +26,8 @@
 Для обоих сервисов имеются подробные спецификации API:
 
 * спецификация основного
-  сервиса: [API основного сервиса] https://raw.githubusercontent.com/yandex-praktikum/java-explore-with-me/main/ewm-main-service-spec.json
+  сервиса: [API основного сервиса](https://raw.githubusercontent.com/yandex-praktikum/java-explore-with-me/main/ewm-main-service-spec.json)
 * спецификация сервиса
-  статистики: [API сервиса статистика] https://raw.githubusercontent.com/yandex-praktikum/java-explore-with-me/main/ewm-stats-service-spec.json
+  статистики: [API сервиса статистика](https://raw.githubusercontent.com/yandex-praktikum/java-explore-with-me/main/ewm-stats-service-spec.json)
 
 #### Gather-Go — это не просто афиша, а полноценный сервис для общения и организации досуга, который упрощает планирование  мероприятий и помогает находить единомышленников.
