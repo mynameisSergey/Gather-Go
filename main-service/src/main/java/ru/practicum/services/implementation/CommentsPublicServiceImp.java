@@ -7,6 +7,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.practicum.exceptions.ResourceNotFoundException;
 import ru.practicum.mappers.CommentsMapper;
 import ru.practicum.models.Comment;
 import ru.practicum.models.Event;
@@ -33,7 +34,12 @@ public class CommentsPublicServiceImp implements CommentsPublicService {
 
     @Override
     public List<CommentDto> get(Long id, Integer from, Integer size) {
-        Event event = eventRepository.get(id);
+        if (from < 0 || size <= 0) {
+            throw new IllegalArgumentException("Параметры 'from' и 'size' должны быть неотрицательными и 'size' должен быть больше 0.");
+        }
+
+        Event event = eventRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Событие с id " + id + " не найдено"));
         Pageable pageable = PageRequest.of(from, size);
         List<Comment> comments = commentsRepository.findByEventAndStateIsNot(event, CommentState.CANCELED, pageable);
         log.info("Выполнен публичный поиск списка комментариев по событию с id: {}, from: {}, size {}", id, from, size);

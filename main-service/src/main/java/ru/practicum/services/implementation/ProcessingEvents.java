@@ -33,10 +33,21 @@ public class ProcessingEvents {
      * @return Лист событий
      */
     public List<Event> addViewsInEventsList(List<Event> events, HttpServletRequest request) {
-        List<String> uris = events.stream().map(e -> request.getRequestURI() + "/" + e.getId()).collect(Collectors.toList());
+        if (events == null || request == null)
+            throw new IllegalArgumentException("Events and request must not be null");
+
+        List<String> uris = events.stream()
+                .map(e -> request.getRequestURI() + "/"
+                        + e.getId()).collect(Collectors.toList());
         LocalDateTime start = findStartDateTime(events);
         LocalDateTime end = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
-        List<ViewStatsDto> stats = statsClient.getStats(start, end, uris, true);
+        List<ViewStatsDto> stats;
+        try {
+            stats = statsClient.getStats(start, end, uris, true);
+        } catch (Exception e) {
+            // Логируем ошибку и обрабатываем ее по мере необходимости
+            throw new RuntimeException("Ошибка при получении статистики", e);
+        }
         fillEventViews(events, stats, request.getRequestURI());
         return events;
     }
@@ -49,9 +60,9 @@ public class ProcessingEvents {
      * @param baseUri Текстовое представление ссылки
      */
     private void fillEventViews(List<Event> events, List<ViewStatsDto> stats, String baseUri) {
-        if (!stats.isEmpty()) {
-            Map<String, Long> statsByUri = stats.stream().collect(Collectors.groupingBy(
-                    ViewStatsDto::getUri, Collectors.summingLong(ViewStatsDto::getHits)));
+        if (stats != null && !stats.isEmpty()) {
+            Map<String, Long> statsByUri = stats.stream()
+                    .collect(Collectors.groupingBy(ViewStatsDto::getUri, Collectors.summingLong(ViewStatsDto::getHits)));
             events.forEach(e -> {
                 Long views = statsByUri.get(baseUri + "/" + e.getId());
                 if (views != null) {

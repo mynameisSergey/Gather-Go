@@ -13,4 +13,8 @@ import java.util.List;
 public class EventRequestStatusUpdateResult {
     private List<ParticipationRequestDto> confirmedRequests;
     private List<ParticipationRequestDto> rejectedRequests;
+    public EventRequestStatusUpdateResult(List<ParticipationRequestDto> confirmedRequests, List<ParticipationRequestDto> rejectedRequests) {
+        this.confirmedRequests = confirmedRequests;
+        this.rejectedRequests = rejectedRequests;
+    }
 }

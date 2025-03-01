@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.practicum.exceptions.ResourceNotFoundException;
 import ru.practicum.mappers.CompilationMapper;
 import ru.practicum.models.Compilation;
 import ru.practicum.models.Event;
@@ -44,25 +45,31 @@ public class CompilationAdminServiceImp implements CompilationAdminService {
     @Override
     @Transactional
     public CompilationDto update(Long compId, UpdateCompilationRequest updateCompilationRequest) {
-        Compilation newCompilation = compilationRepository.get(compId);
-        Set<Event> events;
+        Compilation existingCompilation = compilationRepository.findById(compId)
+                .orElseThrow(() -> new ResourceNotFoundException("Подборка с id " + compId + " не найдена"));
+
         if (updateCompilationRequest.getEvents() != null) {
-            events = addEvents(updateCompilationRequest.getEvents());
-            newCompilation.setEvents(events);
+            Set<Event> events = addEvents(updateCompilationRequest.getEvents());
+            existingCompilation.setEvents(events);
         }
         if (updateCompilationRequest.getPinned() != null) {
-            newCompilation.setPinned(updateCompilationRequest.getPinned());
+            existingCompilation.setPinned(updateCompilationRequest.getPinned());
         }
-        if (updateCompilationRequest.getTitle() != null && updateCompilationRequest.getTitle().isBlank()) {
-            newCompilation.setTitle(updateCompilationRequest.getTitle());
+        if (updateCompilationRequest.getTitle() != null && !updateCompilationRequest.getTitle().isBlank()) {
+            existingCompilation.setTitle(updateCompilationRequest.getTitle());
         }
+
         log.info("Получен запрос на обновление подборки событий по id: {}", compId);
-        return CompilationMapper.compilationToCompilationDto(compilationRepository.save(newCompilation));
+        return CompilationMapper.compilationToCompilationDto(compilationRepository.save(existingCompilation));
     }
 
     @Override
     @Transactional
     public void delete(Long compId) {
+        if (!compilationRepository.existsById(compId)) {
+            throw new ResourceNotFoundException("Подборка с id " + compId + " не найдена");
+        }
+
         compilationRepository.existsById(compId);
         log.info("Получен запрос на удаление подборки событий по id: {}", compId);
         compilationRepository.deleteById(compId);
@@ -75,6 +82,6 @@ public class CompilationAdminServiceImp implements CompilationAdminService {
      * @return Список событий
      */
     private Set<Event> addEvents(List<Long> eventsIds) {
-        return eventRepository.findAllByIdIsIn(eventsIds);
+        return new HashSet<>(eventRepository.findAllById(eventsIds));
     }
 }

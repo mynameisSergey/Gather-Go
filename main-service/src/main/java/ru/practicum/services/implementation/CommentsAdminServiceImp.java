@@ -40,11 +40,16 @@ public class CommentsAdminServiceImp implements CommentsAdminService {
     @Override
     public CommentDto getCommentDtoById(Long id) {
         log.info("Выполнен поиск комментария по id: {}", id);
-        return CommentsMapper.commentToCommentDto(commentsRepository.get(id));
+        Comment comment = commentsRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Комментарий с id " + id + " не найден"));
+        return CommentsMapper.commentToCommentDto(comment);
     }
 
     @Override
     public List<CommentDto> getListCommentDtoById(Long id, Integer from, Integer size) {
+        if (from < 0 || size <= 0)
+            throw new IllegalArgumentException("Параметры 'from' и 'size' должны быть положительными");
+
         Event event = eventRepository.get(id);
         Pageable pageable = PageRequest.of(from, size);
         List<Comment> comments = commentsRepository.findByEvent(event, pageable);
@@ -55,35 +60,47 @@ public class CommentsAdminServiceImp implements CommentsAdminService {
     @Override
     @Transactional
     public CommentDto createCommentDto(InputCommentDto inputCommentDto) {
-        Event event = eventRepository.get(inputCommentDto.getEventId());
-        User user = userRepository.get(inputCommentDto.getUserId());
+        Event event = eventRepository.findById(inputCommentDto.getEventId())
+                .orElseThrow(() -> new ResourceNotFoundException("Событие с id " + inputCommentDto.getEventId() + " не найдено"));
+        User user = userRepository.findById(inputCommentDto.getUserId())
+                .orElseThrow(() -> new ResourceNotFoundException("Пользователь с id " + inputCommentDto.getUserId() + " не найден"));
+
         Comment comment = CommentsMapper.createComment(inputCommentDto, user, event);
-        log.info("Создан объект CommentDto для комментария с eventId: {}, userId: {}",
-                inputCommentDto.getEventId(), inputCommentDto.getUserId());
+        log.info("Создан объект CommentDto для комментария с eventId: {}, userId: {}", inputCommentDto.getEventId(), inputCommentDto.getUserId());
+
         return CommentsMapper.commentToCommentDto(commentsRepository.save(comment));
     }
 
     @Override
     @Transactional
     public CommentDto updateCommentDto(Long id, UpdateCommentAdmin updateComment) {
-        Event event = eventRepository.get(updateComment.getEventId());
+        Comment comment = commentsRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Комментарий с id " + id + " не найден"));
+
+        Event event = eventRepository.findById(updateComment.getEventId())
+                .orElseThrow(() -> new ResourceNotFoundException("Событие с id " + updateComment.getEventId() + " не найдено"));
+
         if (!userRepository.existsById(updateComment.getUserId())) {
-            throw new ResourceNotFoundException("Пользователь c id: " + updateComment.getUserId() + " не найден");
+            throw new ResourceNotFoundException("Пользователь с id: " + updateComment.getUserId() + " не найден");
         }
-        Comment comment = commentsRepository.get(id);
+
         if (!comment.getEvent().getId().equals(event.getId())) {
-            throw new ForbiddenEventException("Комментарий с id: " + comment.getId()
-                    + " не принадлежит событию с id: " + event.getId());
+            throw new ForbiddenEventException("Комментарий с id: " + comment.getId() + " не принадлежит событию с id: " + event.getId());
         }
+
         if (updateComment.getText() != null && !updateComment.getText().isBlank()) {
             comment.setText(updateComment.getText());
         }
+
         if (updateComment.getCommentStateDto() != null) {
             comment.setState(CommentsMapper.toCommentState(updateComment.getCommentStateDto()));
         }
+
         log.info("Изменен комментарий с commentId: {}, eventId: {}", id, event.getId());
+
         return CommentsMapper.commentToCommentDto(commentsRepository.save(comment));
     }
+
 
     @Override
     @Transactional

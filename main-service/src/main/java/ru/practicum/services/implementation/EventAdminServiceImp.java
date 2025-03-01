@@ -26,6 +26,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -149,16 +150,17 @@ public class EventAdminServiceImp implements EventAdminService {
      * @return Новый статус после определения
      */
     private EventState determiningTheStatusForEvent(ActionState stateAction) {
-        if (stateAction == ActionState.SEND_TO_REVIEW) {
-            return EventState.PENDING;
-        } else if (stateAction == ActionState.CANCEL_REVIEW) {
-            return EventState.CANCELED;
-        } else if (stateAction == ActionState.PUBLISH_EVENT) {
-            return EventState.PUBLISHED;
-        } else if (stateAction == ActionState.REJECT_EVENT) {
-            return EventState.CANCELED;
-        } else {
-            throw new BadRequestException("Статус не соответствует модификатору доступа");
+        switch (stateAction) {
+            case SEND_TO_REVIEW:
+                return EventState.PENDING;
+            case CANCEL_REVIEW:
+                return EventState.CANCELED;
+            case PUBLISH_EVENT:
+                return EventState.PUBLISHED;
+            case REJECT_EVENT:
+                return EventState.CANCELED;
+            default:
+                throw new BadRequestException("Статус не соответствует модификатору доступа");
         }
     }
 
@@ -168,7 +170,9 @@ public class EventAdminServiceImp implements EventAdminService {
      * @param event Объект события
      */
     private void eventAvailability(Event event) {
-        if (event.getState().equals(EventState.PUBLISHED) || event.getState().equals(EventState.CANCELED)) {
+        Set<EventState> nonEditableStates = Set.of(EventState.PUBLISHED, EventState.CANCELED);
+
+        if (nonEditableStates.contains(event.getState())) {
             throw new ForbiddenEventException("Статус события не позволяет редактировать событие, статус: " + event.getState());
         }
     }

@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.exceptions.ConflictDeleteException;
 import ru.practicum.exceptions.ConflictNameCategoryException;
+import ru.practicum.exceptions.ResourceNotFoundException;
 import ru.practicum.mappers.CategoryMapper;
 import ru.practicum.models.Category;
 import ru.practicum.models.Event;
@@ -41,7 +42,9 @@ public class CategoryAdminServiceImp implements CategoryAdminService {
     @Override
     @Transactional
     public CategoryDto update(Long id, CategoryDto categoryDto) {
-        Category category = categoryRepository.get(id);
+        Category category = categoryRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Категория с id " + id + " не найдена"));
+
         if (!categoryDto.getName().equals(category.getName())) {
             checkNameCategory(categoryDto.getName());
             category.setName(categoryDto.getName());
@@ -53,7 +56,9 @@ public class CategoryAdminServiceImp implements CategoryAdminService {
     @Override
     @Transactional
     public void delete(Long id) {
-        Category category = categoryRepository.get(id);
+        Category category = categoryRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Категория с id " + id + " не найдена"));
+
         if (isRelatedEvent(category)) {
             throw new ConflictDeleteException("Существуют события, связанные с категорией " + category.getName());
         }

@@ -77,8 +77,8 @@ public class EventPublicServiceImp implements EventPublicService {
                 .timestamp(LocalDateTime.now().format(DateTimeFormatter.ofPattern(DATE_TIME_FORMAT)))
                 .build();
         statsClient.hitRequest(hitDto);
-        Event event = eventRepository.findEventByIdAndStateIs(id, EventState.PUBLISHED).orElseThrow(()
-                -> new ResourceNotFoundException("Событие c id: " + id + " не найдено"));
+        Event event = eventRepository.findEventByIdAndStateIs(id, EventState.PUBLISHED)
+                .orElseThrow(() -> new ResourceNotFoundException("Событие c id: " + id + " не найдено"));
         long count = processingEvents.confirmedRequestsForOneEvent(event, RequestStatus.CONFIRMED);
         event.setConfirmedRequests(count);
         long views = processingEvents.searchViews(event, request);

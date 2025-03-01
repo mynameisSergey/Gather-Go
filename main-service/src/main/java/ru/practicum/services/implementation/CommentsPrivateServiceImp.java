@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.exceptions.BadRequestException;
 import ru.practicum.exceptions.ForbiddenEventException;
+import ru.practicum.exceptions.ResourceNotFoundException;
 import ru.practicum.mappers.CommentsMapper;
 import ru.practicum.models.Comment;
 import ru.practicum.models.Event;
@@ -39,8 +40,11 @@ public class CommentsPrivateServiceImp implements CommentsPrivateService {
 
     @Override
     public CommentDto getCommentDtoByCommentId(Long commentId, Long userId) {
-        Comment comment = commentsRepository.get(commentId);
-        User user = userRepository.get(userId);
+        Comment comment = commentsRepository.findById(commentId)
+                .orElseThrow(() -> new ResourceNotFoundException("Комментарий с id " + commentId + " не найден"));
+
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("Пользователь с id " + userId + " не найден"));
         checkCommentOnOwner(comment, user);
         log.info("Выполнен приватный поиск комментария с commentId: {}, userId: {}", commentId, userId);
         return CommentsMapper.commentToCommentDto(comment);
@@ -48,8 +52,11 @@ public class CommentsPrivateServiceImp implements CommentsPrivateService {
 
     @Override
     public List<CommentDto> getListCommentDtoByEventId(Long eventId, Long userId, Integer from, Integer size) {
-        Event event = eventRepository.get(eventId);
-        User user = userRepository.get(userId);
+        Event event = eventRepository.findById(eventId)
+                .orElseThrow(() -> new ResourceNotFoundException("Событие с id " + eventId + " не найдено"));
+
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("Пользователь с id " + userId + " не найден"));
         Pageable pageable = PageRequest.of(from, size);
         List<Comment> comments = commentsRepository.findByEventAndAuthor(event, user, pageable);
         log.info("Выполнен приватный поиск списка комментариев по eventId: {}, userId: {}, from: {}, size {}",
@@ -60,8 +67,11 @@ public class CommentsPrivateServiceImp implements CommentsPrivateService {
     @Override
     @Transactional
     public CommentDto createCommentDto(InputCommentDto inputCommentDto) {
-        Event event = eventRepository.get(inputCommentDto.getEventId());
-        User user = userRepository.get(inputCommentDto.getUserId());
+        Event event = eventRepository.findById(inputCommentDto.getEventId())
+                .orElseThrow(() -> new ResourceNotFoundException("Событие с id " + inputCommentDto.getEventId() + " не найдено"));
+
+        User user = userRepository.findById(inputCommentDto.getUserId())
+                .orElseThrow(() -> new ResourceNotFoundException("Пользователь с id " + inputCommentDto.getUserId() + " не найден"));
         Comment comment = CommentsMapper.createComment(inputCommentDto, user, event);
         log.info("Приватно создан объект CommentDto для комментария с eventId: {}, userId: {}",
                 inputCommentDto.getEventId(), inputCommentDto.getUserId());
@@ -71,16 +81,22 @@ public class CommentsPrivateServiceImp implements CommentsPrivateService {
     @Override
     @Transactional
     public CommentDto updateCommentDtoByCommentId(Long commentId, InputCommentDto inputCommentDto) {
-        Comment comment = commentsRepository.get(commentId);
+        Comment comment = commentsRepository.findById(commentId)
+                .orElseThrow(() -> new ResourceNotFoundException("Комментарий с id " + commentId + " не найден"));
+
         if (comment.getState() == CommentState.CANCELED) {
             throw new BadRequestException("Комментарий с id:" + comment.getId() + " ранее был отменен");
         }
-        Event event = eventRepository.get(inputCommentDto.getEventId());
-        User user = userRepository.get(inputCommentDto.getUserId());
-        if (!comment.getEvent().getId().equals(event.getId())) {
+
+        Event event = eventRepository.findById(inputCommentDto.getEventId())
+                .orElseThrow(() -> new ResourceNotFoundException("Событие с id " + inputCommentDto.getEventId() + " не найдено"));
+
+        User user = userRepository.findById(inputCommentDto.getUserId())
+                .orElseThrow(() -> new ResourceNotFoundException("Пользователь с id " + inputCommentDto.getUserId() + " не найден"));
+        if (!comment.getEvent().getId().equals(event.getId()))
             throw new ForbiddenEventException("Комментарий с id: " + comment.getId()
                     + " не принадлежит событию с id: " + event.getId());
-        }
+
         checkCommentOnOwner(comment, user);
         Comment newComment = CommentsMapper.updateComment(comment.getId(), inputCommentDto.getText(), user, event);
         log.info("Приватно изменен комментарий с commentId: {}, eventId: {}", commentId, event.getId());
@@ -90,8 +106,11 @@ public class CommentsPrivateServiceImp implements CommentsPrivateService {
     @Override
     @Transactional
     public void deleteCommentDtoByCommentId(Long commentId, Long userId) {
-        User user = userRepository.get(userId);
-        Comment comment = commentsRepository.get(commentId);
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("Пользователь с id " + userId + " не найден"));
+
+        Comment comment = commentsRepository.findById(commentId)
+                .orElseThrow(() -> new ResourceNotFoundException("Комментарий с id " + commentId + " не найден"));
         checkCommentOnOwner(comment, user);
         log.info("Приватно удален комментарий с commentId: {}, userId: {}", commentId, userId);
         commentsRepository.delete(comment);

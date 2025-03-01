@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.exceptions.BadRequestException;
 import ru.practicum.exceptions.ConflictRequestException;
 import ru.practicum.exceptions.ForbiddenEventException;
+import ru.practicum.exceptions.ResourceNotFoundException;
 import ru.practicum.mappers.EventMapper;
 import ru.practicum.mappers.LocationMapper;
 import ru.practicum.mappers.RequestMapper;
@@ -27,6 +28,7 @@ import ru.practicum.repositories.UserRepository;
 import ru.practicum.services.EventPrivateService;
 import ru.practicum.util.DateFormatter;
 
+import javax.persistence.EntityNotFoundException;
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -51,7 +53,14 @@ public class EventPrivateServiceImp implements EventPrivateService {
 
     @Override
     public List<EventShortDto> get(Long userId, int from, int size, HttpServletRequest request) {
-        userRepository.existsById(userId);
+        if (from < 0 || size <= 0)
+            throw new BadRequestException("Параметры 'from' и 'size' должны быть положительными.");
+
+
+        userRepository.findById(userId).orElseThrow(() ->
+                new ResourceNotFoundException("Пользователь с id " + userId + " не найден.")
+        );
+
         Pageable pageable = PageRequest.of(from, size);
         List<Event> events = eventRepository.findAllByInitiatorId(userId, pageable);
         List<Event> eventsAddViews = processingEvents.addViewsInEventsList(events, request);
@@ -60,34 +69,49 @@ public class EventPrivateServiceImp implements EventPrivateService {
         return newEvents.stream().map(EventMapper::eventToEventShortDto).collect(Collectors.toList());
     }
 
+    @Transactional(readOnly = true)
+    public EventFullDto getEvent(Long userId, Long eventId, HttpServletRequest request) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("Пользователь с id " + userId + " не найден"));
+        Event event = eventRepository.findById(eventId)
+                .orElseThrow(() -> new ResourceNotFoundException("Событие с id " + eventId + " не найдено"));
+
+        checkOwnerEvent(event, user);
+        addEventConfirmRequestAndSetViews(event, request);
+
+        log.info("Получен приватный запрос на получение события с id: {} для пользователя с id: {}", eventId, userId);
+        return EventMapper.eventToEventFullDto(event);
+    }
+
     @Override
     @Transactional
     public EventFullDto create(Long userId, NewEventDto newEventDto) {
-        NewEventDto tempNewEventDto = NewEventDto.builder()
-                .annotation(newEventDto.getAnnotation())
-                .category(newEventDto.getCategory())
-                .description(newEventDto.getDescription())
-                .eventDate(newEventDto.getEventDate())
-                .location(newEventDto.getLocation())
-                .paid(newEventDto.getPaid() != null && newEventDto.getPaid())
-                .participantLimit(newEventDto.getParticipantLimit() == null ? 0 : newEventDto.getParticipantLimit())
-                .requestModeration(newEventDto.getRequestModeration() == null || newEventDto.getRequestModeration())
-                .title(newEventDto.getTitle())
-                .build();
-        checkEventDate(DateFormatter.formatDate(tempNewEventDto.getEventDate()));
-        User user = userRepository.get(userId);
-        Category category = categoryRepository.get(tempNewEventDto.getCategory());
+        checkEventDate(DateFormatter.formatDate(newEventDto.getEventDate()));
+
+        User user = userRepository.findById(userId).orElseThrow(() ->
+                new ResourceNotFoundException("Пользователь с id " + userId + " не найден.")
+        );
+
+        Category category = categoryRepository.findById(newEventDto.getCategory()).orElseThrow(() -> new ResourceNotFoundException("Категория с id " + newEventDto.getCategory() + " не найдена.")
+        );
+
         Long views = 0L;
         Long confirmedRequests = 0L;
-        Event event = EventMapper.newEventDtoToCreateEvent(tempNewEventDto, user, category, views, confirmedRequests);
+
+        Event event = EventMapper.newEventDtoToCreateEvent(newEventDto, user, category, views, confirmedRequests);
         log.info("Получен приватный запрос на добавление события пользователем с id: {}", userId);
         return EventMapper.eventToEventFullDto(eventRepository.save(event));
     }
 
     @Override
     public EventFullDto get(Long userId, Long eventId, HttpServletRequest request) {
-        User user = userRepository.get(userId);
-        Event event = eventRepository.get(eventId);
+        User user = userRepository.findById(userId).orElseThrow(() ->
+                new ResourceNotFoundException("Пользователь с id " + userId + " не найден.")
+        );
+
+        Event event = eventRepository.findById(eventId).orElseThrow(() ->
+                new ResourceNotFoundException("Событие с id " + eventId + " не найдено.")
+        );
         checkOwnerEvent(event, user);
         addEventConfirmRequestAndSetViews(event, request);
         log.info("Получен приватный запрос на получение события с id: {} для пользователя с id: {}", eventId, userId);
@@ -147,16 +171,15 @@ public class EventPrivateServiceImp implements EventPrivateService {
 
     @Override
     public List<ParticipationRequestDto> getRequests(Long userId, Long eventId, HttpServletRequest request) {
-        try {
-            Event event = eventRepository.get(eventId);
-            User user = userRepository.get(userId);
-            checkOwnerEvent(event, user);
-            List<Request> requests = requestRepository.findAllByEvent(event);
-            log.info("Получен приватный запрос на получение всех запросов для события с id: {} для пользователя с id: {}", eventId, userId);
-            return requests.stream().map(RequestMapper::requestToParticipationRequestDto).collect(Collectors.toList());
-        } catch (Exception e) {
-            throw new BadRequestException("Некорректный запрос получения списка запросов на участие в текущем событии");
-        }
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("Пользователь с id " + userId + " не найден"));
+
+        Event event = eventRepository.findById(eventId)
+                .orElseThrow(() -> new ResourceNotFoundException("Событие с id " + eventId + " не найдено"));
+        checkOwnerEvent(event, user);
+        List<Request> requests = requestRepository.findAllByEvent(event);
+        log.info("Получен приватный запрос на получение всех запросов для события с id: {} для пользователя с id: {}", eventId, userId);
+        return requests.stream().map(RequestMapper::requestToParticipationRequestDto).collect(Collectors.toList());
     }
 
     @Override
@@ -164,60 +187,95 @@ public class EventPrivateServiceImp implements EventPrivateService {
     public EventRequestStatusUpdateResult updateStatus(Long userId, Long eventId,
                                                        EventRequestStatusUpdateRequest eventRequest,
                                                        HttpServletRequest request) {
-        Event event = eventRepository.get(eventId);
-        User user = userRepository.get(userId);
+        Event event = getEventOrThrow(eventId);
+        User user = getUserOrThrow(userId);
         checkOwnerEvent(event, user);
-        log.info("Получен приватный запрос на обновление статуса запроса для событие с id: {} для пользователя с id: {}", eventId, userId);
+
+        log.info("Получен приватный запрос на обновление статуса запроса для события с id: {} для пользователя с id: {}", eventId, userId);
+
+        initializeEventViewsAndRequests(event, request);
+
+        validateParticipantLimit(event, eventId);
+
+        List<Request> requests = requestRepository.findAllByIdIsIn(eventRequest.getRequestIds());
+
+        if (event.getParticipantLimit() == 0 || !event.isRequestModeration()) {
+            return new EventRequestStatusUpdateResult(new ArrayList<>(), new ArrayList<>());
+        }
+
+        return processRequests(event, eventRequest, requests);
+    }
+
+    private Event getEventOrThrow(Long eventId) {
+        return eventRepository.findById(eventId)
+                .orElseThrow(() -> new EntityNotFoundException("Событие с id " + eventId + " не найдено"));
+    }
+
+    private User getUserOrThrow(Long userId) {
+        return userRepository.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException("Пользователь с id " + userId + " не найден"));
+    }
+
+    private void initializeEventViewsAndRequests(Event event, HttpServletRequest request) {
         if (event.getState().equals(EventState.PUBLISHED)) {
             addEventConfirmRequestAndSetViews(event, request);
         } else {
             event.setViews(0L);
             event.setConfirmedRequests(0L);
         }
+    }
+
+    private void validateParticipantLimit(Event event, Long eventId) {
         if (event.getParticipantLimit() <= event.getConfirmedRequests()) {
             log.warn("Достигнут лимит по заявкам на данное событие с id: {}", eventId);
             throw new ForbiddenEventException("Достигнут лимит по заявкам на данное событие с id: " + eventId);
         }
-        List<Request> requests = requestRepository.findAllByIdIsIn(eventRequest.getRequestIds());
-        if (event.getParticipantLimit() == 0 || !event.isRequestModeration()) {
-            return new EventRequestStatusUpdateResult(new ArrayList<>(), new ArrayList<>());
-        } else if (eventRequest.getStatus().equals(RequestStatus.CONFIRMED)) {
-            List<ParticipationRequestDto> confirmedRequests = new ArrayList<>();
-            List<ParticipationRequestDto> rejectedRequests = new ArrayList<>();
-            long count = processingEvents.confirmedRequestsForOneEvent(event, RequestStatus.CONFIRMED);
-            event.setConfirmedRequests(count);
-            for (Request requestList : requests) {
-                if (!requestList.getStatus().equals(RequestStatus.PENDING)) {
-                    throw new ConflictRequestException("Статус заявки " + requestList.getId()
-                            + " не получается ее одобрить, текущий статус " + requestList.getStatus());
-                }
-                if (event.getConfirmedRequests() <= event.getParticipantLimit()) {
-                    requestList.setStatus(RequestStatus.CONFIRMED);
-                    confirmedRequests.add(RequestMapper.requestToParticipationRequestDto(requestList));
-                    requestRepository.save(requestList);
-                    event.setConfirmedRequests(event.getConfirmedRequests() + 1L);
-                } else {
-                    requestList.setStatus(RequestStatus.REJECTED);
-                    rejectedRequests.add(RequestMapper.requestToParticipationRequestDto(requestList));
-                    requestRepository.save(requestList);
-                }
-            }
-            eventRepository.save(event);
-            return new EventRequestStatusUpdateResult(confirmedRequests, rejectedRequests);
+    }
+
+    private EventRequestStatusUpdateResult processRequests(Event event, EventRequestStatusUpdateRequest eventRequest, List<Request> requests) {
+        if (eventRequest.getStatus().equals(RequestStatus.CONFIRMED)) {
+            return confirmRequests(event, requests);
         } else if (eventRequest.getStatus().equals(RequestStatus.REJECTED)) {
-            EventRequestStatusUpdateResult result = new EventRequestStatusUpdateResult(new ArrayList<>(), new ArrayList<>());
             List<ParticipationRequestDto> rejectedRequests = addRejectedRequests(requests);
-            result.getRejectedRequests().addAll(rejectedRequests);
-            return result;
+            return new EventRequestStatusUpdateResult(new ArrayList<>(), rejectedRequests);
         }
+
         return new EventRequestStatusUpdateResult(new ArrayList<>(), new ArrayList<>());
     }
 
-    /**
-     * Метод проверки времени и даты от текущего времени
-     *
-     * @param eventDate Время и дата из объекта события
-     */
+    private EventRequestStatusUpdateResult confirmRequests(Event event, List<Request> requests) {
+        List<ParticipationRequestDto> confirmedRequests = new ArrayList<>();
+        List<ParticipationRequestDto> rejectedRequests = new ArrayList<>();
+
+        long count = processingEvents.confirmedRequestsForOneEvent(event, RequestStatus.CONFIRMED);
+        event.setConfirmedRequests(count);
+
+        for (Request request : requests) {
+            if (!request.getStatus().equals(RequestStatus.PENDING)) {
+                throw new ConflictRequestException("Статус заявки " + request.getId() + " не позволяет ее одобрить, текущий статус " + request.getStatus());
+            }
+
+            if (event.getConfirmedRequests() < event.getParticipantLimit()) {
+                request.setStatus(RequestStatus.CONFIRMED);
+                confirmedRequests.add(RequestMapper.requestToParticipationRequestDto(request));
+                requestRepository.save(request);
+                event.setConfirmedRequests(event.getConfirmedRequests() + 1L);
+            } else {
+                request.setStatus(RequestStatus.REJECTED);
+                rejectedRequests.add(RequestMapper.requestToParticipationRequestDto(request));
+                requestRepository.save(request);
+            }
+        }
+
+        eventRepository.save(event);
+        return new EventRequestStatusUpdateResult(confirmedRequests, rejectedRequests);
+    }
+
+                /**
+                 * Метод проверки времени и даты от текущего времени
+                 *
+                 * @param eventDate Время и дата из объекта события
+                 */
     private void checkEventDate(LocalDateTime eventDate) {
         if (eventDate != null) {
             LocalDateTime timeNow = LocalDateTime.now().plusHours(2L);
@@ -247,16 +305,16 @@ public class EventPrivateServiceImp implements EventPrivateService {
      * @return Новый статус после определения
      */
     private EventState determiningTheStatusForEvent(ActionState stateAction) {
-        if (stateAction.equals(ActionState.SEND_TO_REVIEW)) {
-            return EventState.PENDING;
-        } else if (stateAction.equals(ActionState.CANCEL_REVIEW)) {
-            return EventState.CANCELED;
-        } else if (stateAction.equals(ActionState.PUBLISH_EVENT)) {
-            return EventState.PUBLISHED;
-        } else if (stateAction.equals(ActionState.REJECT_EVENT)) {
-            return EventState.CANCELED;
-        } else {
-            throw new BadRequestException("Статус не соответствует модификатору доступа");
+        switch (stateAction) {
+            case SEND_TO_REVIEW:
+                return EventState.PENDING;
+            case CANCEL_REVIEW:
+            case REJECT_EVENT:
+                return EventState.CANCELED;
+            case PUBLISH_EVENT:
+                return EventState.PUBLISHED;
+            default:
+                throw new BadRequestException("Статус не соответствует модификатору доступа");
         }
     }
 
@@ -266,6 +324,9 @@ public class EventPrivateServiceImp implements EventPrivateService {
      * @param event Объект события
      */
     private void eventAvailability(Event event) {
+        if (event == null)
+            throw new IllegalArgumentException("Событие не должно быть null");
+
         if (event.getState().equals(EventState.PUBLISHED)) {
             throw new ForbiddenEventException("Статус события не позволяет редактировать событие, статус: " + event.getState());
         }
@@ -297,6 +358,9 @@ public class EventPrivateServiceImp implements EventPrivateService {
      * @param event Объект события
      */
     private void addEventConfirmRequestAndSetViews(Event event, HttpServletRequest request) {
+        if (event == null)
+            throw new IllegalArgumentException("Событие не должно быть null");
+
         long count = processingEvents.confirmedRequestsForOneEvent(event, RequestStatus.CONFIRMED);
         event.setConfirmedRequests(count);
         long views = processingEvents.searchViews(event, request);
