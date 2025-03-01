@@ -3,10 +3,13 @@ package ru.practicum.exp.stat.dto;
 import lombok.*;
 
 /**
- * Модель объекта ViewStats Data Transfer Object
+ * Модель объекта ViewStats Data Transfer Object.
+ *
+ * @param 'app' название приложения
+ * @param 'uri' URI ресурса
+ * @param 'hits' количество обращений
  */
 @Data
-@RequiredArgsConstructor
 @AllArgsConstructor
 public class ViewStatsDto {
 
