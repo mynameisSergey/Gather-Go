@@ -1,6 +1,7 @@
 package ru.practicum.services;
 
 
+import ru.practicum.exceptions.model.NotFoundException;
 import ru.practicum.models.dto.ParticipationRequestDto;
 
 import javax.servlet.http.HttpServletRequest;
@@ -17,7 +18,7 @@ public interface RequestPrivateService {
      * @param id ID пользователя
      * @return Список заявок на участие в событиях
      */
-    List<ParticipationRequestDto> get(Long id);
+    List<ParticipationRequestDto> get(Long id) throws NotFoundException;
 
     /**
      * Метод добавление запроса от текущего пользователя на участие в событии
@@ -26,7 +27,7 @@ public interface RequestPrivateService {
      * @param eventId ID события
      * @return Созданный запрос на участие в событии
      */
-    ParticipationRequestDto create(Long userId, Long eventId, HttpServletRequest request);
+    ParticipationRequestDto create(Long userId, Long eventId, HttpServletRequest request) throws NotFoundException;
 
     /**
      * Метод отмены своего запроса на участие в событии

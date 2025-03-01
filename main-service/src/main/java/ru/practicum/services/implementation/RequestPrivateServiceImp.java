@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.exceptions.BadRequestException;
 import ru.practicum.exceptions.ConflictRequestException;
+import ru.practicum.exceptions.model.NotFoundException;
 import ru.practicum.mappers.RequestMapper;
 import ru.practicum.models.Event;
 import ru.practicum.models.Request;
@@ -41,8 +42,12 @@ public class RequestPrivateServiceImp implements RequestPrivateService {
     private final UserRepository userRepository;
 
     @Override
-    public List<ParticipationRequestDto> get(Long id) {
+    public List<ParticipationRequestDto> get(Long id) throws NotFoundException {
         User user = userRepository.get(id);
+        if (user == null) {
+            log.warn("Пользователь с id: {} не найден", id);
+            throw new NotFoundException("Пользователь не найден");
+        }
         List<Request> requests = requestRepository.findAllByRequesterIs(user);
         log.info("Получен запрос на получение всех запросов пользователя с id:" + id);
         return requests.stream().map(RequestMapper::requestToParticipationRequestDto)
@@ -51,10 +56,17 @@ public class RequestPrivateServiceImp implements RequestPrivateService {
 
     @Override
     @Transactional
-    public ParticipationRequestDto create(Long userId, Long eventId, HttpServletRequest httpServletRequest) {
+    public ParticipationRequestDto create(Long userId, Long eventId, HttpServletRequest httpServletRequest) throws NotFoundException {
         User user = userRepository.get(userId);
+        if (user == null) {
+            throw new NotFoundException("Пользователь не найден");
+        }
         Event event = eventRepository.get(eventId);
-        if (event.getState().equals(EventState.PUBLISHED)) {
+        if (event == null) {
+            throw new NotFoundException("Событие не найдено");
+        }
+
+        if (event.getState() == EventState.PUBLISHED) {
             addEventConfirmRequestAndSetViews(event, httpServletRequest);
         } else {
             event.setViews(0L);
@@ -64,22 +76,7 @@ public class RequestPrivateServiceImp implements RequestPrivateService {
         checkEventOwner(user, event);
         checkParticipantLimit(event);
         checkEventUser(userId, eventId);
-        Request request;
-        if (event.getParticipantLimit() != 0 && event.isRequestModeration()) {
-            request = Request.builder()
-                    .created(LocalDateTime.now())
-                    .event(event)
-                    .requester(user)
-                    .status(RequestStatus.PENDING)
-                    .build();
-        } else {
-            request = Request.builder()
-                    .created(LocalDateTime.now())
-                    .event(event)
-                    .requester(user)
-                    .status(RequestStatus.CONFIRMED)
-                    .build();
-        }
+        Request request = createRequest(user, event);
         try {
             eventRepository.save(event);
             log.info("Получен запрос на добавление запроса от пользователя с id: {} для события id: {}", userId, eventId);
@@ -89,6 +86,18 @@ public class RequestPrivateServiceImp implements RequestPrivateService {
         } catch (IllegalArgumentException e) {
             throw new BadRequestException("Ошибка в формировании запроса");
         }
+    }
+
+    private Request createRequest(User user, Event event) {
+        RequestStatus status = (event.getParticipantLimit() != 0 && event.isRequestModeration())
+                ? RequestStatus.PENDING : RequestStatus.CONFIRMED;
+
+        return Request.builder()
+                .created(LocalDateTime.now())
+                .event(event)
+                .requester(user)
+                .status(status)
+                .build();
     }
 
     @Override
